@@ -1,0 +1,22 @@
+* {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, Tahoma, Helvetica;
+}
+
+body {
+    padding: 20px;
+}
+
+ul.filters {
+    list-style-type: none;
+    clear: both;
+    margin-bottom: 10px;
+    float: left;
+}
+
+ul.filters li {
+    float: left;
+    overflow: hidden;
+    margin-right: 10px;
+}
