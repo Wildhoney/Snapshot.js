@@ -13,3 +13,8 @@ All dependencies can be installed with `bower install` and `npm install`, howeve
  * <a href="http://nodejs.org/">Node.js</a> (server);
  * <a href="http://square.github.io/crossfilter/">Crossfilter</a> (server);
  * <a href="http://pivotal.github.io/jasmine/">Jasmine</a> (grunt);
+
+ Angular
+-----------
+
+Snapshot also comes with a bundled Angular module for easier interaction. Simply add `$snapshot` as a dependency and you have everything you need.
