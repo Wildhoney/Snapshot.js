@@ -35,7 +35,7 @@ Snapshot listens for three events natively, and these are handled automatically.
  * `snapshot/pageNumber` &ndash; Set current page number;
  * `snapshot/sortBy` &ndash; Set order column and ascending/descending;
 
-
+When the collection has been updated, Snapshot emits the `snapshot/contentUpdated` event, passing through the snapshot as the first argument.
 
 Angular
 -----------
