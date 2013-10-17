@@ -29,6 +29,21 @@
             </div>
         </h3>
 
+        <h5 class="ui header">
+            Words Per Page (Currently {{statistics.perPage}}):
+            <div class="ui breadcrumb sub header">
+                <a class="section" ng-click="perPage(5)">5</a>
+                <div class="divider"> / </div>
+                <a class="section" ng-click="perPage(10)">10</a>
+                <div class="divider"> / </div>
+                <a class="section" ng-click="perPage(25)">25</a>
+                <div class="divider"> / </div>
+                <a class="section" ng-click="perPage(50)">50</a>
+                <div class="divider"> / </div>
+                <a class="section" ng-click="perPage(100)">100</a>
+            </div>
+        </h5>
+
         <div class="ui blue message" ng-hide="collection.length">
             Please wait a moment whilst Node.js downloads random words from Wordnik&hellip;
         </div>

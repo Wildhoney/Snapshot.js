@@ -60,6 +60,15 @@
             socket.emit('snapshot/pageNumber', previousPageNumber);
         };
 
+        /**
+         * @method perPage
+         * @param amount {Number}
+         * @return {void}
+         */
+        $scope.perPage = function perPage(amount) {
+            socket.emit('snapshot/perPage', amount);
+        };
+
     });
 
 })(window.app);

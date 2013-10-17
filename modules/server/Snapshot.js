@@ -141,8 +141,9 @@
             }
 
             // Slice up the content according to the `pageNumber` and `perPage`.
-            var offset  = ((this.pageNumber * this.perPage) - this.pageNumber);
-            content     = content.slice(offset, this.perPage + offset);
+            var pageNumber  = (this.pageNumber - 1);
+            var offset      = ((pageNumber * this.perPage) - pageNumber);
+            content         = content.slice(offset, this.perPage + offset);
 
             // Emits the event, passing the collection of models, and the time the
             // operation took the complete.
