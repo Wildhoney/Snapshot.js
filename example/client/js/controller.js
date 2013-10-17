@@ -14,6 +14,18 @@
          */
         $scope.collection = [];
 
+        /**
+         * @property statistics
+         * @type {Object}
+         */
+        $scope.statistics = {};
+
+        /**
+         * @property debug
+         * @type {Object}
+         */
+        $scope.debug = {};
+
         // Establish a connection to the Node.js server.
         var socket = io.connect('http://localhost:8888');
 
@@ -23,7 +35,9 @@
         socket.on('snapshot/contentUpdated', function(data) {
 
             $scope.$apply(function() {
-                $scope.collection = data.models;
+                $scope.collection   = data.models;
+                $scope.statistics   = data.statistics;
+                $scope.debug        = data.debug;
             });
 
         });

@@ -7,6 +7,7 @@
     <script type="text/javascript" src="../../bower_components/angular/angular.js"></script>
     <script type="text/javascript" src="./js/application.js"></script>
     <script type="text/javascript" src="./js/controller.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../bower_components/semantic-ui/build/packaged/css/semantic.css" />
     <link rel="stylesheet" type="text/css" href="./css/default.css" />
 
 </head>
@@ -14,9 +15,34 @@
 
     <section class="content" ng-controller="IndexController">
 
-        <ul ng-repeat="model in collection">
-            <li>{{model.word}}</li>
-        </ul>
+        <h2 class="ui header">
+            Displaying {{statistics.perPage}} of {{statistics.totalModels | number: 0}}.
+            <div class="sub header">Last Snapshot.js operation took ~{{debug.responseTime}} milliseconds.</div>
+        </h2>
+
+        <h3 class="ui header">
+            Pagination:
+            <div class="ui breadcrumb sub header">
+                <a class="section" ng-click="previousPage">Previous Page</a>
+                <div class="divider"> / </div>
+                <a class="section" ng-click="nextPage">Next Page</a>
+            </div>
+        </h3>
+
+        <table class="ui sortable table segment">
+            <thead>
+                <tr>
+                    <th>Primary Key</th>
+                    <th>Word</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="model in collection">
+                    <td>{{model.id}}</td>
+                    <td>{{model.word}}</td>
+                </tr>
+            </tbody>
+        </table>
 
     </section>
 
