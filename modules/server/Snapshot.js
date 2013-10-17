@@ -136,24 +136,28 @@
                 totalPages  = Math.ceil(totalModels / this.perPage);
 
             // Reverse the sorting if we want to sort by ascending.
-            if (_.contains(['ascending', 'asc'], this.sorting.direction)) {
+            if (_.contains(['ascending', 'ascend', 'asc'], this.sorting.direction)) {
                 content = content.reverse();
             }
 
-            // Slice up the content according to the `pageNumber` and `perPage`.
-            var pageNumber  = (this.pageNumber - 1);
-            var offset      = ((pageNumber * this.perPage) - pageNumber);
-            content         = content.slice(offset, this.perPage + offset);
+            if (this.perPage !== 0) {
+
+                // Slice up the content according to the `pageNumber` and `perPage`.
+                var pageNumber  = (this.pageNumber - 1);
+                var offset      = ((pageNumber * this.perPage) - pageNumber);
+                content         = content.slice(offset, this.perPage + offset);
+
+            }
 
             // Emits the event, passing the collection of models, and the time the
             // operation took the complete.
             this.socket.emit('snapshot/contentUpdated', {
                 models: content,
                 statistics: {
-                    totalPages      : totalPages,
+                    totalPages      : isFinite(totalPages) ? totalPages : 1,
                     totalModels     : totalModels,
                     currentPage     : this.pageNumber,
-                    perPage         : this.perPage,
+                    perPage         : this.perPage || totalModels,
                     sortKey         : this.sorting.key,
                     sortDirection   : this.sorting.direction
                 },

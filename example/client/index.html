@@ -16,7 +16,7 @@
     <section class="content" ng-controller="IndexController">
 
         <h2 class="ui header">
-            Displaying {{statistics.perPage}} of {{statistics.totalModels | number: 0}}.
+            Displaying {{statistics.perPage | number: 0}} of {{statistics.totalModels | number: 0}}.
             <div class="sub header">Last Snapshot.js operation took ~{{debug.responseTime}} milliseconds.</div>
         </h2>
 
@@ -30,7 +30,7 @@
         </h3>
 
         <h5 class="ui header">
-            Words Per Page (Currently {{statistics.perPage}}):
+            Words Per Page (Currently {{statistics.perPage | number: 0}}):
             <div class="ui breadcrumb sub header">
                 <a class="section" ng-click="perPage(5)">5</a>
                 <div class="divider"> / </div>
@@ -41,6 +41,8 @@
                 <a class="section" ng-click="perPage(50)">50</a>
                 <div class="divider"> / </div>
                 <a class="section" ng-click="perPage(100)">100</a>
+                <div class="divider"> / </div>
+                <a class="section" ng-click="perPage(0)">All</a>
             </div>
         </h5>
 
@@ -48,7 +50,7 @@
             Please wait a moment whilst Node.js downloads random words from Wordnik&hellip;
         </div>
 
-        <table class="ui table segment" ng-show="collection.length">
+        <table class="ui table sortable segment" ng-show="collection.length">
             <thead>
                 <tr>
                     <th ng-click="sortBy('id')" style="width: 175px;">Primary Key</th>
