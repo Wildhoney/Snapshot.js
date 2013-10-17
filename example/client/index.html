@@ -21,18 +21,22 @@
         </h2>
 
         <h3 class="ui header">
-            Pagination:
+            Pagination (Page {{statistics.currentPage}} of {{statistics.totalPages | number: 0}}):
             <div class="ui breadcrumb sub header">
-                <a class="section" ng-click="previousPage">Previous Page</a>
+                <a class="section" ng-click="previousPage()">Previous Page</a>
                 <div class="divider"> / </div>
-                <a class="section" ng-click="nextPage">Next Page</a>
+                <a class="section" ng-click="nextPage()">Next Page</a>
             </div>
         </h3>
 
-        <table class="ui sortable table segment">
+        <div class="ui blue message" ng-hide="collection.length">
+            Please wait a moment whilst Node.js downloads random words from Wordnik&hellip;
+        </div>
+
+        <table class="ui table segment" ng-show="collection.length">
             <thead>
                 <tr>
-                    <th>Primary Key</th>
+                    <th style="width: 175px;">Primary Key</th>
                     <th>Word</th>
                 </tr>
             </thead>

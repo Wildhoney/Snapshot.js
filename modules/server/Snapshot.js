@@ -70,22 +70,22 @@
              * @on snapshot/perPage
              */
             socket.on('snapshot/perPage', function (data) {
-                snapshot.setPerPage(data);
-            });
+                this.setPerPage(data);
+            }.bind(this));
 
             /**
              * @on snapshot/pageNumber
              */
             socket.on('snapshot/pageNumber', function (data) {
-                snapshot.setPageNumber(data);
-            });
+                this.setPageNumber(data);
+            }.bind(this));
 
             /**
              * @on snapshot/sortBy
              */
             socket.on('snapshot/sortBy', function (data) {
-                snapshot.setSortBy(data);
-            });
+                this.setSortBy(data);
+            }.bind(this));
 
         },
 
@@ -141,7 +141,8 @@
             }
 
             // Slice up the content according to the `pageNumber` and `perPage`.
-            content = content.slice(0, this.perPage);
+            var offset  = ((this.pageNumber * this.perPage) - this.pageNumber);
+            content     = content.slice(offset, this.perPage + offset);
 
             // Emits the event, passing the collection of models, and the time the
             // operation took the complete.

@@ -42,6 +42,24 @@
 
         });
 
+        /**
+         * @method nextPage
+         * @return {void}
+         */
+        $scope.nextPage = function nextPage() {
+            var nextPageNumber = $scope.statistics.currentPage += 1;
+            socket.emit('snapshot/pageNumber', nextPageNumber);
+        };
+
+        /**
+         * @method previousPage
+         * @return {void}
+         */
+        $scope.previousPage = function previousPage() {
+            var previousPageNumber = $scope.statistics.currentPage -= 1;
+            socket.emit('snapshot/pageNumber', previousPageNumber);
+        };
+
     });
 
 })(window.app);
