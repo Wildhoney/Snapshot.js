@@ -69,6 +69,18 @@
             socket.emit('snapshot/perPage', amount);
         };
 
+        /**
+         * @method sortBy
+         * @param property {String}
+         * @return {void}
+         */
+        $scope.sortBy = function sortBy(property) {
+            socket.emit('snapshot/sortBy', {
+                key         : property,
+                direction   : false
+            });
+        };
+
     });
 
 })(window.app);

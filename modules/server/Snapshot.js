@@ -150,10 +150,12 @@
             this.socket.emit('snapshot/contentUpdated', {
                 models: content,
                 statistics: {
-                    totalPages  : totalPages,
-                    totalModels : totalModels,
-                    currentPage : this.pageNumber,
-                    perPage     : this.perPage
+                    totalPages      : totalPages,
+                    totalModels     : totalModels,
+                    currentPage     : this.pageNumber,
+                    perPage         : this.perPage,
+                    sortKey         : this.sorting.key,
+                    sortDirection   : this.sorting.direction
                 },
                 debug: {
                     responseTime: (new Date().getTime() - start)
@@ -187,13 +189,29 @@
         /**
          * @method setSortBy
          * @emit snapshot/contentUpdated
-         * @param key {String}
-         * @param direction {String}
+         * @param options {Array}
          * @return {void}
          */
-        setSortBy: function setSortBy(key, direction) {
-            this.sorting = { key: key, direction: direction };
+        setSortBy: function setSortBy(options) {
+
+            /**
+             * @method invertDirection
+             * Responsible for inverting the current sort direction if it hasn't
+             * been explicitly specified.
+             * @return {void}
+             */
+            var invertDirection = function invertDirection() {
+                return (this.sorting.direction === 'ascending') ?
+                       'descending' : 'ascending';
+            }.bind(this);
+
+            this.sorting = {
+                key         : options.key,
+                direction   : options.direction || invertDirection()
+            };
+
             this._emitContentUpdated();
+
         }
 
     };

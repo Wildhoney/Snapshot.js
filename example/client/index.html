@@ -51,8 +51,8 @@
         <table class="ui table segment" ng-show="collection.length">
             <thead>
                 <tr>
-                    <th style="width: 175px;">Primary Key</th>
-                    <th>Word</th>
+                    <th ng-click="sortBy('id')" style="width: 175px;">Primary Key</th>
+                    <th ng-click="sortBy('word')">Word</th>
                 </tr>
             </thead>
             <tbody>

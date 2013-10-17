@@ -37,6 +37,15 @@ Snapshot listens for three events natively, and these are handled automatically.
 
 When the collection has been updated, Snapshot emits the `snapshot/contentUpdated` event, passing through the snapshot as the first argument.
 
+For sorting by any given column, you can emit the `snapshot/sortBy` event with a simple hash. If you omit the `direction` property (or set its value to `false`) then Snapshot will cleverly invert the current sorting direction for you.
+
+```javascript
+socket.emit('snapshot/sortBy', {
+    key         : property,
+    direction   : 'descending'
+});
+```
+
 Angular
 -----------
 
