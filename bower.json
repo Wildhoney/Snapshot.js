@@ -14,7 +14,6 @@
     "tests"
   ],
   "dependencies": {
-    "underscore": "~1.5.2",
     "socket.io-client": "~0.9.16",
     "angular": "~1.0.8"
   }
