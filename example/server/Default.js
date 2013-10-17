@@ -12,8 +12,8 @@ io.sockets.on('connection', function (socket) {
 
     // Configure the defaults.
     snapshot.setPerPage(10);
-//    snapshot.setPageNumber(1);
-//    snapshot.setSortBy('id');
+    snapshot.setPageNumber(1);
+    snapshot.setSortBy('word', 'ascending');
 
     // URL to fetch the example JSON data from.
     var url = 'http://api.wordnik.com/v4/words.json/randomWords?hasDictionaryDef=false&minCorpusCount=0&maxCorpusCount=-1&minDictionaryCount=1&maxDictionaryCount=-1&minLength=5&maxLength=-1&limit=10000&api_key=a2a73e7b926c924fad7001ca3111acd55af2ffabf50eb4ae5';

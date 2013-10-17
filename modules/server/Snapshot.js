@@ -21,7 +21,7 @@
          * @property crossfilter
          * @type {Array}
          */
-        crossfilter: [],
+        crossfilter: null,
 
         /**
          * @property dimensions
@@ -40,6 +40,21 @@
          * @type {Number}
          */
         perPage: 0,
+
+        /**
+         * @property pageNumber
+         * @type {Number}
+         */
+        pageNumber: 0,
+
+        /**
+         * @property sorting
+         * @type {Object}
+         */
+        sorting: {
+            key         : '',
+            direction   : 'ascending'
+        },
 
         /**
          * @method initialise
@@ -109,14 +124,38 @@
          */
         _emitContentUpdated: function _emitContentUpdated() {
 
-            var start   = new Date().getTime(),
-                content = this.dimensions.id.filterAll().top(this.perPage);
+            if (!this.crossfilter) {
+                // Don't attempt to fetch the content if we haven't loaded the
+                // Crossfilter yet.
+                return;
+            }
+
+            var start       = new Date().getTime(),
+                content     = this.dimensions[this.sorting.key].filterAll().top(Infinity),
+                totalModels = content.length,
+                totalPages  = Math.ceil(totalModels / this.perPage);
+
+            // Reverse the sorting if we want to sort by ascending.
+            if (_.contains(['ascending', 'asc'], this.sorting.direction)) {
+                content = content.reverse();
+            }
+
+            // Slice up the content according to the `pageNumber` and `perPage`.
+            content = content.slice(0, this.perPage);
 
             // Emits the event, passing the collection of models, and the time the
             // operation took the complete.
             this.socket.emit('snapshot/contentUpdated', {
-                models          : content,
-                responseTime    : (new Date().getTime() - start)
+                models: content,
+                statistics: {
+                    totalPages  : totalPages,
+                    totalModels : totalModels,
+                    currentPage : this.pageNumber,
+                    perPage     : this.perPage
+                },
+                debug: {
+                    responseTime: (new Date().getTime() - start)
+                }
             });
 
         },
@@ -129,6 +168,7 @@
          */
         setPerPage: function setPerPage(value) {
             this.perPage = value;
+            this._emitContentUpdated();
         },
 
         /**
@@ -138,17 +178,20 @@
          * @return {void}
          */
         setPageNumber: function setPageNumber(value) {
-
+            this.pageNumber = value;
+            this._emitContentUpdated();
         },
 
         /**
          * @method setSortBy
          * @emit snapshot/contentUpdated
-         * @param value {Number}
+         * @param key {String}
+         * @param direction {String}
          * @return {void}
          */
-        setSortBy: function setSortBy(value) {
-
+        setSortBy: function setSortBy(key, direction) {
+            this.sorting = { key: key, direction: direction };
+            this._emitContentUpdated();
         }
 
     };
