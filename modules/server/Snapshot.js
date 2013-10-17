@@ -1,5 +1,10 @@
 (function() {
 
+    "use strict";
+
+    var crossfilter = require('crossfilter'),
+        _           = require('underscore');
+
     /**
      * @module Snapshot
      * @constructor
@@ -13,34 +18,37 @@
     Snapshot.prototype = {
 
         /**
-         * @property collection
+         * @property crossfilter
          * @type {Array}
          */
-        collection: [],
+        crossfilter: [],
 
         /**
          * @method initialise
          * @param socket {Object}
          * @return {void}
          */
-        initialise: function setSocket(socket) {
+        bootstrap: function setSocket(socket) {
 
             /**
-             * @on perPage
-             * @emit contentUpdated
+             * @on snapshot/perPage
              */
-            socket.on('perPage', function (data) {
+            socket.on('snapshot/perPage', function (data) {
                 snapshot.setPerPage(data);
-                socket.emit('contentUpdated', snapshot.getContent());
             });
 
             /**
-             * @on pageNumber
-             * @emit contentUpdated
+             * @on snapshot/pageNumber
              */
-            socket.on('pageNumber', function (data) {
+            socket.on('snapshot/pageNumber', function (data) {
                 snapshot.setPageNumber(data);
-                socket.emit('contentUpdated', snapshot.getContent());
+            });
+
+            /**
+             * @on snapshot/limit
+             */
+            socket.on('snapshot/limit', function (data) {
+                snapshot.setLimit(data);
             });
 
         },
@@ -51,7 +59,20 @@
          * @return {void}
          */
         setData: function setData(collection) {
-            this.collection = collection;
+
+            this.crossfilter    = crossfilter(collection);
+            var keys            = _.keys(collection[0]);
+
+            _.forEach(keys, function(key) {
+
+                // Iterate over each key found in the first model, and create a
+                // dimension for it.
+                this.crossfilter.dimension(function(model) {
+                    return model[key];
+                });
+
+            }.bind(this));
+
         },
 
         /**
@@ -69,6 +90,15 @@
          * @return {void}
          */
         setPageNumber: function setPageNumber(value) {
+
+        },
+
+        /**
+         * @method setLimit
+         * @param value {Number}
+         * @return {void}
+         */
+        setLimit: function setLimit(value) {
 
         }
 
