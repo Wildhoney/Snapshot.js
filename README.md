@@ -14,7 +14,30 @@ All dependencies can be installed with `bower install` and `npm install`, howeve
  * <a href="http://square.github.io/crossfilter/">Crossfilter</a> (server);
  * <a href="http://pivotal.github.io/jasmine/">Jasmine</a> (grunt);
 
- Angular
+Quick Start
+-----------
+
+Once a WebSocket connection has been successfully established, you're able to bootstrap Snapshot, passing in the WebSocket (Socket.IO) reference as a dependency.
+
+```javascript
+snapshot.bootstrap(socket);
+```
+
+You then need to tell Snapshot what collection it's going to be creating snapshots of.
+
+```javascript
+snapshot.setCollection(json);
+```
+
+Snapshot listens for three events natively, and these are handled automatically.
+
+ * `snapshot/perPage` &ndash; Set amount per page;
+ * `snapshot/pageNumber` &ndash; Set current page number;
+ * `snapshot/sortBy` &ndash; Set order column and ascending/descending;
+
+
+
+Angular
 -----------
 
 Snapshot also comes with a bundled Angular module for easier interaction. Simply add `$snapshot` as a dependency and you have everything you need.

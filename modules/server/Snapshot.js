@@ -45,20 +45,20 @@
             });
 
             /**
-             * @on snapshot/limit
+             * @on snapshot/sortBy
              */
-            socket.on('snapshot/limit', function (data) {
-                snapshot.setLimit(data);
+            socket.on('snapshot/sortBy', function (data) {
+                snapshot.setSortBy(data);
             });
 
         },
 
         /**
-         * @method setData
+         * @method setCollection
          * @param collection {Array}
          * @return {void}
          */
-        setData: function setData(collection) {
+        setCollection: function setCollection(collection) {
 
             this.crossfilter    = crossfilter(collection);
             var keys            = _.keys(collection[0]);
@@ -77,6 +77,7 @@
 
         /**
          * @method setPerPage
+         * @emit snapshot/contentUpdated
          * @param value {Number}
          * @return {void}
          */
@@ -86,6 +87,7 @@
 
         /**
          * @method setPageNumber
+         * @emit snapshot/contentUpdated
          * @param value {Number}
          * @return {void}
          */
@@ -94,11 +96,12 @@
         },
 
         /**
-         * @method setLimit
+         * @method setSortBy
+         * @emit snapshot/contentUpdated
          * @param value {Number}
          * @return {void}
          */
-        setLimit: function setLimit(value) {
+        setSortBy: function setSortBy(value) {
 
         }
 
