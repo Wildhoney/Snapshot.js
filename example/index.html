@@ -4,6 +4,7 @@
 
     <title>Snapshot.js Example</title>
     <script type="text/javascript" src="./../bower_components/socket.io-client/dist/socket.io.js"></script>
+    <script type="text/javascript" src="./../bower_components/mustache/mustache.js"></script>
     <script type="text/javascript" src="./../modules/client/Snapshot.js"></script>
     <link rel="stylesheet" type="text/css" href="./css/default.css" />
 
@@ -30,6 +31,16 @@
         <li><a href="javascript:void(0);">2</a></li>
         <li><a href="javascript:void(0);">3</a></li>
     </ul>
+
+    <section class="content">
+
+        {{#models}}
+
+            {{name}}
+
+        {{/models}}
+
+    </section>
 
 </body>
 </html>

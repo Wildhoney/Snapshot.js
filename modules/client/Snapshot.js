@@ -6,7 +6,17 @@
      */
     var Snapshot = function() {
 
-        this.socketIo = io.connect('http://localhost:8888');
+        this.socket = io.connect('http://localhost:8888');
+
+        /**
+         * @on contentUpdated
+         */
+        this.socket.on('contentUpdated', function contentUpdated(models) {
+
+            var section = $window.document.querySelector('section.content');
+            section.innerHTML(models);
+
+        });
 
     };
 
@@ -17,10 +27,10 @@
     Snapshot.prototype = {
 
         /**
-         * @property socketIo
+         * @property socket
          * @type {Object}
          */
-        socketIo: null
+        socket: null
 
     };
 

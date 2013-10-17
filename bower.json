@@ -15,6 +15,7 @@
   ],
   "dependencies": {
     "underscore": "~1.5.2",
-    "socket.io-client": "~0.9.16"
+    "socket.io-client": "~0.9.16",
+    "mustache": "~0.7.2"
   }
 }
