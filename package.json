@@ -1,7 +1,7 @@
 {
   "name": "Snapshot.js",
   "version": "0.0.1",
-  "description": "Snapshot.js ===========",
+  "description": "Snapshot.js",
   "main": "index.js",
   "scripts": {
     "test": "grunt test"

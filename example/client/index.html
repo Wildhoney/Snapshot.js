@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <title>Snapshot.js Example</title>
+    <script type="text/javascript" src="../../bower_components/socket.io-client/dist/socket.io.js"></script>
+    <script type="text/javascript" src="../../bower_components/angular/angular.js"></script>
+    <script type="text/javascript" src="./js/application.js"></script>
+    <script type="text/javascript" src="./js/controller.js"></script>
+    <script type="text/javascript" src="../../modules/client/Snapshot.js"></script>
+    <link rel="stylesheet" type="text/css" href="./css/default.css" />
+
+</head>
+<body ng-app="app">
+
+    <section class="content" ng-controller="IndexController">
+
+        <ul ng-repeat="model in collection">
+            <li>{{model.word}}</li>
+        </ul>
+
+    </section>
+
+</body>
+</html>

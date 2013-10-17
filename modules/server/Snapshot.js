@@ -24,11 +24,32 @@
         crossfilter: [],
 
         /**
+         * @property dimensions
+         * @type {Object}
+         */
+        dimensions: {},
+
+        /**
+         * @property socket
+         * @type {Object}
+         */
+        socket: null,
+
+        /**
+         * @property perPage
+         * @type {Number}
+         */
+        perPage: 0,
+
+        /**
          * @method initialise
          * @param socket {Object}
          * @return {void}
          */
         bootstrap: function setSocket(socket) {
+
+            // Keep a reference to the socket for emitting purposes.
+            this.socket = socket;
 
             /**
              * @on snapshot/perPage
@@ -67,11 +88,36 @@
 
                 // Iterate over each key found in the first model, and create a
                 // dimension for it.
-                this.crossfilter.dimension(function(model) {
+                this.dimensions[key] = this.crossfilter.dimension(function(model) {
                     return model[key];
                 });
 
             }.bind(this));
+
+            // Emit the `snapshot/contentUpdated` event because we've loaded
+            // the collection into memory.
+            this._emitContentUpdated();
+
+        },
+
+        /**
+         * @method _emitContentUpdated
+         * @emit snapshot/contentUpdated
+         * Responsible for generating the content and firing the event to notify
+         * the client of the current collection of models.
+         * @private
+         */
+        _emitContentUpdated: function _emitContentUpdated() {
+
+            var start   = new Date().getTime(),
+                content = this.dimensions.id.filterAll().top(this.perPage);
+
+            // Emits the event, passing the collection of models, and the time the
+            // operation took the complete.
+            this.socket.emit('snapshot/contentUpdated', {
+                models          : content,
+                responseTime    : (new Date().getTime() - start)
+            });
 
         },
 
@@ -82,7 +128,7 @@
          * @return {void}
          */
         setPerPage: function setPerPage(value) {
-
+            this.perPage = value;
         },
 
         /**
