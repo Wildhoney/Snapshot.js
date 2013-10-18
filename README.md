@@ -93,7 +93,7 @@ snapshot.clearFilters();
 Delta Updates
 -----------
 
-There may be instances where sending delta updates is preferable to re-sending whole models. Snapshot supports the providing of delta updates &ndash; essentially, any models that have already been transmitted across the wire will not be sent again in their entirety; instead only their primary ID is set.
+There may be instances where sending delta updates is preferable to re-sending whole models. Snapshot supports the providing of delta updates &ndash; essentially, any models that have already been transmitted across the wire will not be sent again in their entirety; instead only their primary ID is sent.
 
 ```javascript
 snapshot.bootstrap(socket).useDelta(true);
@@ -105,11 +105,9 @@ Once you've enabled delta updates using `useDelta(true)` as part of the bootstra
 snapshot.setCollection([{ id: 1 }, { id: 2 }, { id: 3 }], 'id');
 ```
 
-Since unique models will <strong>only</strong> ever be transmitted once, it's imperative that you keep a history of all models from the `snapshot/contentUpdated` event, and then to utilise those from the history when you come across a delta model.
+Since unique models will <strong>only</strong> ever be transmitted once, it's imperative that you keep a history of all models from the `snapshot/contentUpdated` event, and then to utilise those from your local cache when you come across a delta model.
 
-How would you go about detecting?
-
-Delta models are nothing more than the primary key of the model, which will help you lookup the model from your own history collection. Therefore to detect a delta model, simply use something like `isFinite` (or Underscore's `_.isNumber`) on the returned collection.
+Delta models are nothing more than the primary key of the model, which will help you lookup the model from your own collection cache. Therefore to detect a delta model, simply use something like `Number.isFinite` (or Underscore's `_.isNumber`) on the returned collection.
 
 ```javascript
 socket.on('snapshot/contentUpdated', function(data) {
