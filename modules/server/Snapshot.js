@@ -57,11 +57,11 @@
         },
 
         /**
-         * @method initialise
+         * @method bootstrap
          * @param socket {Object}
          * @return {void}
          */
-        bootstrap: function setSocket(socket) {
+        bootstrap: function bootstrap(socket) {
 
             // Keep a reference to the socket for emitting purposes.
             this.socket = socket;
