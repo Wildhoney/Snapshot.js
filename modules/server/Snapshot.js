@@ -152,7 +152,8 @@
 
             // Sort the content according to the current sort options.
             var quickSort = crossfilter.quicksort.by(function(model) {
-                return model[this.sorting.key].toLowerCase();
+                var value = model[this.sorting.key];
+                return _.isString(value) ? value.toLowerCase() : value;
             }.bind(this));
 
             content = quickSort(content, 0, content.length);
