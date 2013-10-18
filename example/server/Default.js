@@ -1,6 +1,6 @@
 var io          = require('socket.io').listen(8888),
     request     = require('request'),
-    snapshot    = require('./../../modules/server/Snapshot.js');
+    snapshot    = require('./../../modules/Snapshot.js');
 
 /**
  * @on connection

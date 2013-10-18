@@ -86,6 +86,21 @@ You can also clear every single filter by using the `clearFilters` method.
 snapshot.clearFilters();
 ```
 
+Architecture
+-----------
+
+Below is a simple diagram of how Snapshot works. It demonstrates how the `snapshot/pageNumber` event operates &ndash; which is also the same way other native Snapshot events function. It also demonstrates the flow of custom filters.
+
+<img src="http://oi42.tinypic.com/v33vb9.jpg alt="Snapshot Architecture" />
+
+ * Browser establishes a WebSocket connection to Node.js &ndash; models are added;
+ * Browser emits `snapshot/pageNumber` event with data (example);
+ * Snapshot along with Crossfilter updates the collection <i>snapshot</i>;
+ * Snapshot emits `snapshot/contentUpdated` event with the updated collection;
+ * Browser emits a custom event (`customFilterApplied`) with the data;
+ * Node.js listens for the `customFilterApplied` event and then interacts with Snapshot;
+ * Snapshot emits the `snapshot/contentUpdated` event with the updated filter applied;
+
 Angular
 -----------
 
