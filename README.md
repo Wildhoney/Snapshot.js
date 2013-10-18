@@ -46,6 +46,46 @@ socket.emit('snapshot/sortBy', {
 });
 ```
 
+Filtering
+-----------
+
+In addition to sorting and limiting, Snapshot also allows for the filtering of the collection. For this you can use the `applyFilter` filter method. Unfortunately you will need to read <a href="https://github.com/square/crossfilter/wiki/API-Reference" target="_blank">Crossfilter's API Reference</a> before you begin filtering.
+
+```javascript
+socket.emit('filterByWord', text);
+```
+
+You can apply a filter however you like. It doesn't necessarily need to be applied via WebSockets, you could just as well use vanilla Node.js or Express.js. In our example though, we emit the `filterByWord` event to the Node.js server, and then we need to listen for that event.
+
+```javascript
+socket.on('filterByWord', function(text) {
+
+    snapshot.applyFilter('word', function(dimension) {
+
+        dimension.filterFunction(function(d) {
+            var regExp = new RegExp(text, 'i');
+            return d.match(regExp);
+        });
+
+    });
+
+});
+```
+
+You essentially invoke the `applyFilter` on the `snapshot` object. Snapshot will pass in the `dimension` argument to your lambda function &ndash; `this` context is preserved. It's then entirely up to you to apply that dimension to the collection.
+
+If you would like to clear a specific dimension, then you can use the `clearFilter` method &ndash; which takes the property name as its one and only argument.
+
+```javascript
+snapshot.clearFilter('word');
+```
+
+You can also clear every single filter by using the `clearFilters` method.
+
+```javascript
+snapshot.clearFilters();
+```
+
 Angular
 -----------
 
