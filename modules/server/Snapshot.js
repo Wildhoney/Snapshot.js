@@ -145,21 +145,13 @@
             }
 
             var start       = new Date().getTime(),
-                content     = this.dimensions['__primary'].filterAll().top(Infinity),
+                content     = this.dimensions[this.sorting.key].top(Infinity),
                 totalModels = content.length,
                 totalPages  = (totalModels / this.perPage < 0)
                               ? 0 : Math.ceil(totalModels / this.perPage);
 
-            // Sort the content according to the current sort options.
-            var quickSort = crossfilter.quicksort.by(function(model) {
-                var value = model[this.sorting.key];
-                return _.isString(value) ? value.toLowerCase() : value;
-            }.bind(this));
-
-            content = quickSort(content, 0, content.length);
-
             // Reverse the sorting if we want to sort by descending.
-            if (_.contains(['descending', 'descend', 'desc'], this.sorting.direction)) {
+            if (_.contains(['ascending', 'ascend', 'asc'], this.sorting.direction)) {
                 content = content.reverse();
             }
 
