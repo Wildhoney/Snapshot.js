@@ -25,11 +25,13 @@ Once a WebSocket connection has been successfully established, you're able to bo
 snapshot.bootstrap(socket);
 ```
 
-You then need to tell Snapshot what collection it's going to be creating snapshots of.
+You then need to tell Snapshot what collection it's going to be creating snapshots of. You can pass in an optional string for the `primaryKey` &ndash; if you omit the `primaryKey` then the first key of the first model is used.
 
 ```javascript
-snapshot.setCollection(collection);
+snapshot.setCollection(collection, primaryKey);
 ```
+
+<small>(`primaryKey` is an optional parameter.)</small>
 
 Snapshot listens for three events natively, and these are handled automatically.
 
@@ -86,6 +88,44 @@ You can also clear every single filter by using the `clearFilters` method.
 
 ```javascript
 snapshot.clearFilters();
+```
+
+Delta Updates
+-----------
+
+There may be instances where sending delta updates is preferable to re-sending whole models. Snapshot supports the providing of delta updates &ndash; essentially, any models that have already been transmitted across the wire will not be sent again in their entirety; instead only their primary ID is set.
+
+```javascript
+snapshot.bootstrap(socket).useDelta(true);
+```
+
+Once you've enabled delta updates using `useDelta(true)` as part of the bootstrap process, Snapshot will keeps a history of transmitted models. It's crucial that you set the appropriate primary ID when invoking `setCollection`, otherwise a default primary key will be assumed.
+
+```javascript
+snapshot.setCollection([{ id: 1 }, { id: 2 }, { id: 3 }], 'id');
+```
+
+Since unique models will <strong>only</strong> ever be transmitted once, it's imperative that you keep a history of all models from the `snapshot/contentUpdated` event, and then to utilise those from the history when you come across a delta model.
+
+How would you go about detecting?
+
+Delta models are nothing more than the primary key of the model, which will help you lookup the model from your own history collection. Therefore to detect a delta model, simply use something like `isFinite` (or Underscore's `_.isNumber`) on the returned collection.
+
+```javascript
+socket.on('snapshot/contentUpdated', function(data) {
+
+    _.forEach(data, function(model) {
+
+        if (_.isNumber(model)) {
+            // Delta model!
+            return;
+        }
+
+        // ...
+
+    });
+
+});
 ```
 
 Architecture

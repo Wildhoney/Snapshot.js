@@ -42,7 +42,7 @@
 
             $scope.$apply(function() {
                 $scope.collection   = data.models;
-                $scope.stats   = data.stats;
+                $scope.stats        = data.stats;
                 $scope.debug        = data.debug;
             });
 
@@ -53,7 +53,7 @@
          * @return {void}
          */
         $scope.nextPage = function nextPage() {
-            var nextPageNumber = $scope.stats.currentPage += 1;
+            var nextPageNumber = $scope.stats.pages.current += 1;
             socket.emit('snapshot/pageNumber', nextPageNumber);
         };
 
@@ -62,7 +62,7 @@
          * @return {void}
          */
         $scope.previousPage = function previousPage() {
-            var previousPageNumber = $scope.stats.currentPage -= 1;
+            var previousPageNumber = $scope.stats.pages.current -= 1;
             socket.emit('snapshot/pageNumber', previousPageNumber);
         };
 

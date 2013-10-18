@@ -36,6 +36,27 @@
         socket: null,
 
         /**
+         * @property primaryKey
+         * @type {String}
+         */
+        primaryKey: '',
+
+        /**
+         * @property memory
+         * @type {Object}
+         */
+        memory: {},
+
+        /**
+         * @property delta
+         * @type {Boolean}
+         * Whether or not to provide delta updates to the connected clients.
+         * In enabling delta updates, more work is required on the frontend to memorise which
+         * models were already sent.
+         */
+        delta: false,
+
+        /**
          * @property perPage
          * @type {Number}
          */
@@ -59,7 +80,7 @@
         /**
          * @method bootstrap
          * @param socket {Object}
-         * @return {void}
+         * @return {Snapshot}
          */
         bootstrap: function bootstrap(socket) {
 
@@ -87,19 +108,35 @@
                 this.setSortBy(data);
             }.bind(this));
 
+            return this;
+
+        },
+
+        /**
+         * @method useDelta
+         * @param status {Boolean}
+         * Responsible for enabling or disabling delta updates where models that have already been
+         * sent across the wire are not transmitted again -- instead, only their primary ID is transmitted.
+         * @return {Boolean}
+         */
+        useDelta: function useDelta(status) {
+            this.delta = status;
+            return status;
         },
 
         /**
          * @method setCollection
          * @param collection {Array}
+         * @param primaryKey {String}
          * @return {void}
          */
-        setCollection: function setCollection(collection) {
+        setCollection: function setCollection(collection, primaryKey) {
 
             this.crossfilter    = crossfilter(collection);
             var keys            = _.keys(collection[0]);
+            this.primaryKey     = (primaryKey || keys[0]);
 
-            _.forEach(keys, function(key) {
+                _.forEach(keys, function(key) {
 
                 // Iterate over each key found in the first model, and create a
                 // dimension for it.
@@ -148,6 +185,34 @@
                 var pageNumber  = (this.pageNumber - 1);
                 var offset      = (pageNumber * this.perPage);
                 content         = content.slice(offset, this.perPage + offset);
+
+            }
+
+            // Determine if Snapshot has been kindly requested to send delta updates to reduce
+            // the amount of bandwidth being transferred across the wire.
+            if (this.delta) {
+
+                // Pluck all of the primary keys from the current collection of models.
+                var ids = _.pluck(content, this.primaryKey);
+
+                // Iterate over each of the current collection of models, transforming them into
+                // their primary key if they've been sent already.
+                _.forEach(content, function(model, key) {
+
+                    var primaryKey = model[this.primaryKey];
+
+                    if (this.memory[primaryKey]) {
+                        // Replace the full model with just its primary key if it's already been
+                        // transferred to the client.
+                        content[key] = primaryKey;
+                    }
+
+                }.bind(this));
+
+                // Iterate over each of the plucked IDs, adding them to the memory object.
+                _.forEach(ids, function(id) {
+                    this.memory[id] = id;
+                }.bind(this));
 
             }
 

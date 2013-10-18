@@ -47,12 +47,14 @@
         </h5>
 
         <div class="ui action input">
-            <input type="text" placeholder="Filter the words..." ng-model="filter" style="width: 350px;">
-            <div class="ui blue button" ng-click="applyFilter(filter)">
-                <i class="search icon"></i>
-                Apply
+            <input type="text" placeholder="Filter down the collection of words..." ng-model="filter" style="width: 350px;">
+            <div class="ui buttons">
+                <div class="ui blue button" ng-click="applyFilter(filter)">
+                    <i class="search icon"></i>
+                    Apply
+                </div>
+                <div class="ui grey button" ng-click="clearFilter()">Clear</div>
             </div>
-            <div class="ui grey button" ng-click="clearFilter()">Clear</div>
         </div>
 
         <div class="ui blue message" ng-hide="collection.length">
