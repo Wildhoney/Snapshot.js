@@ -101,7 +101,14 @@ Below is a simple diagram of how Snapshot works. It demonstrates how the `snapsh
  * Node.js listens for the `customFilterApplied` event and then interacts with Snapshot;
  * Snapshot emits the `snapshot/contentUpdated` event with the updated filter applied;
 
+Unit Testing
+-----------
+
+Grunt is a prerequisite to run the Jasmine tests, which is installed when you run `npm install`. Afterwards all of Snapshot's unit tests can be run with the `grunt test` command from the terminal.
+
 Angular
 -----------
+
+<img src="https://lh6.googleusercontent.com/-DtPuPzooNEY/AAAAAAAAAAI/AAAAAAAAAC4/6Y1jxzshd4g/photo.jpg?sz=48" alt="Angular.js" />
 
 Snapshot also comes with a bundled Angular module for easier interaction. Simply add `$snapshot` as a dependency and you have everything you need.

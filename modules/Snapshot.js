@@ -139,8 +139,8 @@
             var start       = new Date().getTime(),
                 content     = this.dimensions[this.sorting.key][sortingMethod](Infinity),
                 totalModels = content.length,
-                totalPages  = (totalModels / this.perPage < 0)
-                              ? 0 : Math.ceil(totalModels / this.perPage);
+                totalPages  = (totalModels / this.perPage < 0) ?
+                              0 : Math.ceil(totalModels / this.perPage);
 
             if (this.perPage !== 0) {
 
