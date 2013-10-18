@@ -1,0 +1,11 @@
+language: node_js
+
+node_js:
+   - "0.8"
+
+before_script:
+  - npm -q install
+  - npm -q install -g grunt-cli
+
+script:
+  - grunt test
