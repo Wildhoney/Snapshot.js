@@ -16,12 +16,12 @@
     <section class="content" ng-controller="IndexController">
 
         <h2 class="ui header">
-            Displaying {{statistics.visibleModels | number: 0}} of {{statistics.totalModels | number: 0}}.
+            Displaying {{stats.models.current | number: 0}} of {{stats.models.total | number: 0}}.
             <div class="sub header">Last Snapshot.js operation took ~{{debug.responseTime}} milliseconds.</div>
         </h2>
 
         <h3 class="ui header">
-            Pagination (Page {{statistics.currentPage}} of {{statistics.totalPages | number: 0}}):
+            Pagination (Page {{stats.pages.current}} of {{stats.pages.total | number: 0}}):
             <div class="ui breadcrumb sub header">
                 <a class="section" ng-click="previousPage()">Previous Page</a>
                 <div class="divider"> / </div>
@@ -30,7 +30,7 @@
         </h3>
 
         <h5 class="ui header">
-            Words Per Page (Currently {{statistics.perPage | number: 0}}):
+            Words Per Page (Currently {{stats.pages.perPage | number: 0}}):
             <div class="ui breadcrumb sub header">
                 <a class="section" ng-click="perPage(5)">5</a>
                 <div class="divider"> / </div>

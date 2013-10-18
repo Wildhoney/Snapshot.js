@@ -155,14 +155,20 @@
             // operation took the complete.
             this.socket.emit('snapshot/contentUpdated', {
                 models: content,
-                statistics: {
-                    totalPages      : isFinite(totalPages) ? totalPages : 1,
-                    totalModels     : totalModels,
-                    currentPage     : this.pageNumber,
-                    visibleModels   : content.length,
-                    perPage         : this.perPage || totalModels,
-                    sortKey         : this.sorting.key,
-                    sortDirection   : this.sorting.direction
+                stats: {
+                    pages: {
+                        total       : isFinite(totalPages) ? totalPages : 1,
+                        current     : this.pageNumber,
+                        perPage     : this.perPage || content.length
+                    },
+                    models: {
+                        total       : totalModels,
+                        current     : content.length
+                    },
+                    sort: {
+                        key         : this.sorting.key,
+                        direction   : this.sorting.direction
+                    }
                 },
                 debug: {
                     responseTime: (new Date().getTime() - start)

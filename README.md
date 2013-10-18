@@ -28,7 +28,7 @@ snapshot.bootstrap(socket);
 You then need to tell Snapshot what collection it's going to be creating snapshots of.
 
 ```javascript
-snapshot.setCollection(collection, primaryKey);
+snapshot.setCollection(collection);
 ```
 
 Snapshot listens for three events natively, and these are handled automatically.
