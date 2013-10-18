@@ -36,10 +36,20 @@ io.sockets.on('connection', function (socket) {
 
     /**
      * @on changedStartCharacter
-     * Updates the content when the `changedStartCharacter` event has been received.
+     * @param text {String}
+     * Updates the content when the `filterByWord` event has been received.
      */
-    socket.on('changedStartCharacter', function(data) {
-        console.log(data);
+    socket.on('filterByWord', function(text) {
+
+        snapshot.applyFilter('word', function(dimension) {
+
+            dimension.filterFunction(function(d) {
+                var regExp = new RegExp(text, 'i');
+                return d.match(regExp);
+            });
+
+        });
+
     });
 
 });

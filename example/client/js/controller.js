@@ -26,6 +26,12 @@
          */
         $scope.debug = {};
 
+        /**
+         * @property filter
+         * @type {String}
+         */
+        $scope.filter = '';
+
         // Establish a connection to the Node.js server.
         var socket = io.connect('http://localhost:8888');
 
@@ -79,6 +85,15 @@
                 key         : property,
                 direction   : false
             });
+        };
+
+        /**
+         * @method applyFilter
+         * @param text {String|Number}
+         * @return {void}
+         */
+        $scope.applyFilter = function applyFilter(text) {
+            socket.emit('filterByWord', text);
         };
 
     });

@@ -30,6 +30,13 @@
         dimensions: {},
 
         /**
+         * @property primaryKey
+         * @type {String}
+         * Primary key used for the default dimension.
+         */
+        primaryKey: null,
+
+        /**
          * @property socket
          * @type {Object}
          */
@@ -92,12 +99,19 @@
         /**
          * @method setCollection
          * @param collection {Array}
+         * @param primaryKey {String}
          * @return {void}
          */
-        setCollection: function setCollection(collection) {
+        setCollection: function setCollection(collection, primaryKey) {
 
             this.crossfilter    = crossfilter(collection);
             var keys            = _.keys(collection[0]);
+            this.primaryKey     = (primaryKey || keys[0]);
+
+            // Create the primary dimension from the primary key.
+            this.dimensions.__primary = this.crossfilter.dimension(function(model) {
+                return model[this.primaryKey];
+            }.bind(this));
 
             _.forEach(keys, function(key) {
 
@@ -131,7 +145,7 @@
             }
 
             var start       = new Date().getTime(),
-                content     = this.dimensions[this.sorting.key].filterAll().top(Infinity),
+                content     = this.dimensions['__primary'].filterAll().top(Infinity),
                 totalModels = content.length,
                 totalPages  = Math.ceil(totalModels / this.perPage);
 
@@ -174,8 +188,8 @@
          * @param value {Number}
          * @return {void}
          */
-        setPerPage: function setPerPage(value) {
-            this.perPage = value;
+        setPerPage: function setPerPage(perPage) {
+            this.perPage = perPage;
             this._emitContentUpdated();
         },
 
@@ -185,8 +199,8 @@
          * @param value {Number}
          * @return {void}
          */
-        setPageNumber: function setPageNumber(value) {
-            this.pageNumber = value;
+        setPageNumber: function setPageNumber(pageNumber) {
+            this.pageNumber = pageNumber;
             this._emitContentUpdated();
         },
 
@@ -205,8 +219,7 @@
              * @return {void}
              */
             var invertDirection = function invertDirection() {
-                return (this.sorting.direction === 'ascending') ?
-                       'descending' : 'ascending';
+                return (this.sorting.direction === 'ascending') ? 'descending' : 'ascending';
             }.bind(this);
 
             this.sorting = {
@@ -214,6 +227,22 @@
                 direction   : options.direction || invertDirection()
             };
 
+            this._emitContentUpdated();
+
+        },
+
+        /**
+         * @method applyFilter
+         * @param key {String}
+         * @param filterMethod {Function}
+         * @emit snapshot/contentUpdated
+         * Responsible for applying a filter on any given dimension by its key name.
+         * @return {void}
+         */
+        applyFilter: function applyFilter(key, filterMethod) {
+
+            var dimension = this.dimensions[key];
+            filterMethod.call(this, dimension);
             this._emitContentUpdated();
 
         }
