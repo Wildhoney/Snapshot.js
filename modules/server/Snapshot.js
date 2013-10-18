@@ -149,8 +149,15 @@
                 totalModels = content.length,
                 totalPages  = Math.ceil(totalModels / this.perPage);
 
-            // Reverse the sorting if we want to sort by ascending.
-            if (_.contains(['ascending', 'ascend', 'asc'], this.sorting.direction)) {
+            // Sort the content according to the current sort options.
+            var quickSort = crossfilter.quicksort.by(function(model) {
+                return model[this.sorting.key].toLowerCase();
+            }.bind(this));
+
+            content = quickSort(content, 0, content.length);
+
+            // Reverse the sorting if we want to sort by descending.
+            if (_.contains(['descending', 'descend', 'desc'], this.sorting.direction)) {
                 content = content.reverse();
             }
 
@@ -242,6 +249,7 @@
         applyFilter: function applyFilter(key, filterMethod) {
 
             var dimension = this.dimensions[key];
+            dimension.filterAll();
             filterMethod.call(this, dimension);
             this._emitContentUpdated();
 
