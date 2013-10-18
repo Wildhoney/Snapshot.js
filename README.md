@@ -23,7 +23,7 @@ Once a WebSocket connection has been successfully established, you're able to bo
 snapshot.bootstrap(socket);
 ```
 
-You then need to tell Snapshot what collection it's going to be creating snapshots of. You can pass in an optional string for the `primaryKey` &ndash; if you omit the `primaryKey` then the first key of the first model is used.
+You then need to tell Snapshot what collection it's going to be creating snapshots of.
 
 ```javascript
 snapshot.setCollection(collection, primaryKey);

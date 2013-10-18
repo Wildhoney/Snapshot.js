@@ -30,13 +30,6 @@
         dimensions: {},
 
         /**
-         * @property primaryKey
-         * @type {String}
-         * Primary key used for the default dimension.
-         */
-        primaryKey: null,
-
-        /**
          * @property socket
          * @type {Object}
          */
@@ -99,19 +92,12 @@
         /**
          * @method setCollection
          * @param collection {Array}
-         * @param primaryKey {String}
          * @return {void}
          */
-        setCollection: function setCollection(collection, primaryKey) {
+        setCollection: function setCollection(collection) {
 
             this.crossfilter    = crossfilter(collection);
             var keys            = _.keys(collection[0]);
-            this.primaryKey     = (primaryKey || keys[0]);
-
-            // Create the primary dimension from the primary key.
-            this.dimensions.__primary = this.crossfilter.dimension(function(model) {
-                return model[this.primaryKey];
-            }.bind(this));
 
             _.forEach(keys, function(key) {
 
@@ -144,16 +130,17 @@
                 return;
             }
 
+            // Determine whether to use `top` or `bottom` depending on direction.
+            var sortingMethod = 'top';
+            if (_.contains(['ascending', 'ascend', 'asc'], this.sorting.direction)) {
+                sortingMethod = 'bottom';
+            }
+
             var start       = new Date().getTime(),
-                content     = this.dimensions[this.sorting.key].top(Infinity),
+                content     = this.dimensions[this.sorting.key][sortingMethod](Infinity),
                 totalModels = content.length,
                 totalPages  = (totalModels / this.perPage < 0)
                               ? 0 : Math.ceil(totalModels / this.perPage);
-
-            // Reverse the sorting if we want to sort by descending.
-            if (_.contains(['ascending', 'ascend', 'asc'], this.sorting.direction)) {
-                content = content.reverse();
-            }
 
             if (this.perPage !== 0) {
 
