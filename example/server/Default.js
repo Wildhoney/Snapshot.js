@@ -35,11 +35,11 @@ io.sockets.on('connection', function (socket) {
     });
 
     /**
-     * @on changedStartCharacter
+     * @on applyFilterByWord
      * @param text {String}
-     * Updates the content when the `filterByWord` event has been received.
+     * Updates the content when the `applyFilterByWord` event has been received.
      */
-    socket.on('filterByWord', function(text) {
+    socket.on('applyFilterByWord', function(text) {
 
         snapshot.applyFilter('word', function(dimension) {
 
@@ -50,6 +50,13 @@ io.sockets.on('connection', function (socket) {
 
         });
 
+    });
+
+    /**
+     * @on clearFilterByWord
+     */
+    socket.on('clearFilterByWord', function() {
+        snapshot.clearFilter('word');
     });
 
 });

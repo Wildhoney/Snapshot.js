@@ -93,7 +93,16 @@
          * @return {void}
          */
         $scope.applyFilter = function applyFilter(text) {
-            socket.emit('filterByWord', text);
+            socket.emit('applyFilterByWord', text);
+        };
+
+        /**
+         * @method clearFilter
+         * @return {void}
+         */
+        $scope.clearFilter = function clearFilter() {
+            socket.emit('clearFilterByWord');
+            $scope.filter = '';
         };
 
     });

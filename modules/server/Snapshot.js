@@ -178,6 +178,7 @@
                     totalPages      : isFinite(totalPages) ? totalPages : 1,
                     totalModels     : totalModels,
                     currentPage     : this.pageNumber,
+                    visibleModels   : content.length,
                     perPage         : this.perPage || totalModels,
                     sortKey         : this.sorting.key,
                     sortDirection   : this.sorting.direction
@@ -249,8 +250,23 @@
         applyFilter: function applyFilter(key, filterMethod) {
 
             var dimension = this.dimensions[key];
-            dimension.filterAll();
+            this.clearFilter(key);
             filterMethod.call(this, dimension);
+            this._emitContentUpdated();
+
+        },
+
+        /**
+         * @method clearFilter
+         * @param key {String}
+         * @emit snapshot/contentUpdated
+         * Responsible for clearing a filter based on its key.
+         * @return {void}
+         */
+        clearFilter: function clearFilter(key) {
+
+            var dimension = this.dimensions[key];
+            dimension.filterAll();
             this._emitContentUpdated();
 
         }

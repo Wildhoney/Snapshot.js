@@ -16,7 +16,7 @@
     <section class="content" ng-controller="IndexController">
 
         <h2 class="ui header">
-            Displaying {{statistics.perPage | number: 0}} of {{statistics.totalModels | number: 0}}.
+            Displaying {{statistics.visibleModels | number: 0}} of {{statistics.totalModels | number: 0}}.
             <div class="sub header">Last Snapshot.js operation took ~{{debug.responseTime}} milliseconds.</div>
         </h2>
 
@@ -52,6 +52,7 @@
                 <i class="search icon"></i>
                 Apply
             </div>
+            <div class="ui grey button" ng-click="clearFilter()">Clear</div>
         </div>
 
         <div class="ui blue message" ng-hide="collection.length">
