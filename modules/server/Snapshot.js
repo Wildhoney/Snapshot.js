@@ -250,6 +250,19 @@
             dimension.filterAll();
             this._emitContentUpdated();
 
+        },
+
+        /**
+         * @method clearFilters
+         * @emit snapshot/contentUpdated
+         * Responsible for clearing the filters of every single dimension.
+         * @return {void}
+         */
+        clearFilters: function clearFilters() {
+            _.forEach(this.dimensions, function(dimension) {
+                dimension.filterAll();
+            });
+            this._emitContentUpdated();
         }
 
     };
