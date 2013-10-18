@@ -147,7 +147,8 @@
             var start       = new Date().getTime(),
                 content     = this.dimensions['__primary'].filterAll().top(Infinity),
                 totalModels = content.length,
-                totalPages  = Math.ceil(totalModels / this.perPage);
+                totalPages  = (totalModels / this.perPage < 0)
+                              ? 0 : Math.ceil(totalModels / this.perPage);
 
             // Sort the content according to the current sort options.
             var quickSort = crossfilter.quicksort.by(function(model) {
@@ -165,7 +166,7 @@
 
                 // Slice up the content according to the `pageNumber` and `perPage`.
                 var pageNumber  = (this.pageNumber - 1);
-                var offset      = ((pageNumber * this.perPage) - pageNumber);
+                var offset      = (pageNumber * this.perPage);
                 content         = content.slice(offset, this.perPage + offset);
 
             }
