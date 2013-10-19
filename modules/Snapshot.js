@@ -1,4 +1,4 @@
-(function() {
+(function($module) {
 
     "use strict";
 
@@ -342,14 +342,16 @@
          * @return {void}
          */
         clearFilters: function clearFilters() {
+
             _.forEach(this.dimensions, function(dimension) {
                 dimension.filterAll();
             });
             this._emitContentUpdated();
+
         }
 
     };
 
-    module.exports = Snapshot;
+    $module.exports = Snapshot;
 
-})();
+})(module);
