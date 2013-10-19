@@ -3,7 +3,8 @@
     "use strict";
 
     var crossfilter = require('crossfilter'),
-        _           = require('underscore');
+        _           = require('underscore'),
+        io          = require('socket.io');
 
     /**
      * @module Snapshot
@@ -13,7 +14,11 @@
     var Snapshot = function(namespace) {
 
         // Configure the namespace, with the default being "default".
-        this.namespace = namespace || 'default';
+        this.namespace      = namespace || 'default';
+
+        // Reset items for each instantiation.
+        this.crossfilter    = null;
+        this.dimensions     = {};
 
     };
 
@@ -78,7 +83,7 @@
          * @property pageNumber
          * @type {Number}
          */
-        pageNumber: 0,
+        pageNumber: 1,
 
         /**
          * @property sorting
@@ -95,6 +100,9 @@
          * @return {Snapshot}
          */
         bootstrap: function bootstrap(socket) {
+
+
+            console.log(socket.id);
 
             // Keep a reference to the socket for emitting purposes.
             this.socket = socket;
@@ -140,9 +148,10 @@
          * @method setCollection
          * @param collection {Array}
          * @param primaryKey {String}
+         * @param suppressEmit {Boolean}
          * @return {void}
          */
-        setCollection: function setCollection(collection, primaryKey) {
+        setCollection: function setCollection(collection, primaryKey, suppressEmit) {
 
             this.crossfilter    = crossfilter(collection);
             var keys            = _.keys(collection[0]);
@@ -158,9 +167,11 @@
 
             }.bind(this));
 
-            // Emit the `snapshot/:namespace/contentUpdated` event because we've loaded
-            // the collection into memory.
-            this._emitContentUpdated();
+            if (!suppressEmit) {
+                // Emit the `snapshot/:namespace/contentUpdated` event because we've loaded
+                // the collection into memory.
+                this._emitContentUpdated();
+            }
 
         },
 
@@ -178,6 +189,8 @@
                 // Crossfilter yet.
                 return;
             }
+
+            console.log(this.pageNumber);
 
             // Determine whether to use `top` or `bottom` depending on direction.
             var sortingMethod = 'top';
@@ -268,7 +281,7 @@
         /**
          * @method setPageNumber
          * @emit snapshot/:namespace/contentUpdated
-         * @param value {Number}
+         * @param pageNumber {Number}
          * @return {void}
          */
         setPageNumber: function setPageNumber(pageNumber) {
