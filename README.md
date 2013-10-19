@@ -22,7 +22,7 @@ Quick Start
 Once a WebSocket connection has been successfully established, you're able to bootstrap Snapshot, passing in the WebSocket (Socket.IO) reference as a dependency.
 
 ```javascript
-snapshot.bootstrap(socket);
+var $snapshot = new Snapshot().bootstrap(socket).useDelta(false);
 ```
 
 You then need to tell Snapshot what collection it's going to be creating snapshots of. You can pass in an optional string for the `primaryKey` &ndash; if you omit the `primaryKey` then the first key of the first model is used.
@@ -96,7 +96,7 @@ Delta Updates
 There may be instances where sending delta updates is preferable to re-sending whole models. Snapshot supports the providing of delta updates &ndash; essentially, any models that have already been transmitted across the wire will not be sent again in their entirety; instead only their primary ID is sent.
 
 ```javascript
-snapshot.bootstrap(socket).useDelta(true);
+var $snapshot = new Snapshot().bootstrap(socket).useDelta(true);
 ```
 
 Once you've enabled delta updates using `useDelta(true)` as part of the bootstrap process, Snapshot will keeps a history of transmitted models. It's crucial that you set the appropriate primary ID when invoking `setCollection`, otherwise a default primary key will be assumed.

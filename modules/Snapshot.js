@@ -117,11 +117,11 @@
          * @param status {Boolean}
          * Responsible for enabling or disabling delta updates where models that have already been
          * sent across the wire are not transmitted again -- instead, only their primary ID is transmitted.
-         * @return {Boolean}
+         * @return {Snapshot}
          */
         useDelta: function useDelta(status) {
             this.delta = status;
-            return status;
+            return this;
         },
 
         /**
@@ -217,12 +217,12 @@
             }
 
             // Emits the event, passing the collection of models, and the time the
-            // operation took the complete.
+            // operation took to complete.
             this.socket.emit('snapshot/contentUpdated', {
                 models: content,
                 stats: {
                     pages: {
-                        total       : isFinite(totalPages) ? totalPages : 1,
+                        total       : _.isNumber(totalPages) ? totalPages : 1,
                         current     : this.pageNumber,
                         perPage     : this.perPage || content.length
                     },
@@ -338,6 +338,6 @@
 
     };
 
-    module.exports = new Snapshot();
+    module.exports = Snapshot;
 
 })();
