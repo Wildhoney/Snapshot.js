@@ -1,6 +1,6 @@
 var io          = require('socket.io').listen(8888),
     request     = require('request'),
-    snapshot    = require('./../../modules/Snapshot.js');
+    Snapshot    = require('./../../modules/Snapshot.js');
 
 /**
  * @on connection
@@ -8,12 +8,12 @@ var io          = require('socket.io').listen(8888),
 io.sockets.on('connection', function (socket) {
 
     // Bootstrap Snapshot passing in the reference for the socket as a dependency.
-    snapshot.bootstrap(socket).useDelta(false);
+    var $snapshot = new Snapshot().bootstrap(socket).useDelta(false);
 
     // Configure the defaults.
-    snapshot.setPerPage(10);
-    snapshot.setPageNumber(1);
-    snapshot.setSortBy({
+    $snapshot.setPerPage(10);
+    $snapshot.setPageNumber(1);
+    $snapshot.setSortBy({
         key         : 'word',
         direction   : 'ascending'
     });
@@ -28,7 +28,7 @@ io.sockets.on('connection', function (socket) {
             // When the request is successful, pass the collection to Snapshot's `setData`
             // after parsing the JSON document.
             var json = JSON.parse(content);
-            snapshot.setCollection(json);
+            $snapshot.setCollection(json);
 
         }
 
@@ -41,7 +41,7 @@ io.sockets.on('connection', function (socket) {
      */
     socket.on('applyFilterByWord', function(text) {
 
-        snapshot.applyFilter('word', function(dimension) {
+        $snapshot.applyFilter('word', function(dimension) {
 
             dimension.filterFunction(function(d) {
                 var regExp = new RegExp(text, 'i');
@@ -56,7 +56,7 @@ io.sockets.on('connection', function (socket) {
      * @on clearFilterByWord
      */
     socket.on('clearFilterByWord', function() {
-        snapshot.clearFilter('word');
+        $snapshot.clearFilter('word');
     });
 
 });
