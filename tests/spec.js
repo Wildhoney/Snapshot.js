@@ -95,7 +95,7 @@ describe('Snapshot.js', function() {
         var $snapshot, ioServer = require('socket.io').listen(8889, { log: false });
         var ioClient = require('socket.io-client');
 
-        beforeEach(function() {
+        beforeEach(function(done) {
 
             ioServer.sockets.on('connection', function (socket) {
 
@@ -107,18 +107,24 @@ describe('Snapshot.js', function() {
 
             });
 
+            done();
+
         });
 
         describe('Native Events', function() {
 
             var $client;
 
-            beforeEach(function() {
+            beforeEach(function(done) {
 
                 $client = ioClient.connect('http://0.0.0.0:8889', {
                     transports: ['websocket'],
                     'force new connection': true
                 });
+
+                $client.on('connect', function() {
+                    done();
+                })
 
             });
 
@@ -146,6 +152,27 @@ describe('Snapshot.js', function() {
                 $client.on('snapshot/default/contentUpdated', function(data) {
                     data.models.should.have.lengthOf(6);
                     data.models[0].name.should.equal('Simon');
+                });
+            });
+
+            it('Should store the IDs for those already sent', function() {
+                $snapshot.memory['1'] = 1;
+                $client.on('snapshot/default/contentUpdated', function(data) {
+                    $snapshot.memory.should.be.instanceOf(Object);
+                    $snapshot.memory.should.have.property('3');
+                    data.models[0].should.equal('1');
+                });
+            });
+
+            it('Should provide delta models for those already sent', function() {
+                $snapshot.useDelta(true);
+                $snapshot.delta.should.equal(true);
+
+                $client.emit('snapshot/default/pageNumber', 1);
+                $client.on('snapshot/default/contentUpdated', function(data) {
+                    $snapshot.memory.should.be.instanceOf(Object);
+                    $snapshot.memory.should.have.property('3');
+                    data.models[0].name.should.equal('Adam');
                 });
             });
 
