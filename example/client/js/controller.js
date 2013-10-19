@@ -36,9 +36,9 @@
         var socket = io.connect('http://localhost:8888');
 
         /**
-         * @on snapshot/contentUpdated
+         * @on snapshot/default/contentUpdated
          */
-        socket.on('snapshot/contentUpdated', function(data) {
+        socket.on('snapshot/default/contentUpdated', function(data) {
 
             $scope.$apply(function() {
                 $scope.collection   = data.models;
@@ -54,7 +54,7 @@
          */
         $scope.nextPage = function nextPage() {
             var nextPageNumber = $scope.stats.pages.current += 1;
-            socket.emit('snapshot/pageNumber', nextPageNumber);
+            socket.emit('snapshot/default/pageNumber', nextPageNumber);
         };
 
         /**
@@ -63,7 +63,7 @@
          */
         $scope.previousPage = function previousPage() {
             var previousPageNumber = $scope.stats.pages.current -= 1;
-            socket.emit('snapshot/pageNumber', previousPageNumber);
+            socket.emit('snapshot/default/pageNumber', previousPageNumber);
         };
 
         /**
@@ -72,7 +72,7 @@
          * @return {void}
          */
         $scope.perPage = function perPage(amount) {
-            socket.emit('snapshot/perPage', amount);
+            socket.emit('snapshot/default/perPage', amount);
         };
 
         /**
@@ -81,7 +81,7 @@
          * @return {void}
          */
         $scope.sortBy = function sortBy(property) {
-            socket.emit('snapshot/sortBy', {
+            socket.emit('snapshot/default/sortBy', {
                 key         : property,
                 direction   : false
             });

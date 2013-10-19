@@ -7,15 +7,27 @@
 
     /**
      * @module Snapshot
+     * @param namespace {String}
      * @constructor
      */
-    var Snapshot = function() {};
+    var Snapshot = function(namespace) {
+
+        // Configure the namespace, with the default being "default".
+        this.namespace = namespace || 'default';
+
+    };
 
     /**
      * @property prototype
      * @type {Object}
      */
     Snapshot.prototype = {
+
+        /**
+         * @property namespace
+         * @type {String}
+         */
+        namespace: '',
 
         /**
          * @property crossfilter
@@ -88,23 +100,23 @@
             this.socket = socket;
 
             /**
-             * @on snapshot/perPage
+             * @on snapshot/:namespace/perPage
              */
-            socket.on('snapshot/perPage', function (data) {
+            socket.on('snapshot/' + this.namespace + '/perPage', function (data) {
                 this.setPerPage(data);
             }.bind(this));
 
             /**
-             * @on snapshot/pageNumber
+             * @on snapshot/:namespace/pageNumber
              */
-            socket.on('snapshot/pageNumber', function (data) {
+            socket.on('snapshot/' + this.namespace + '/pageNumber', function (data) {
                 this.setPageNumber(data);
             }.bind(this));
 
             /**
-             * @on snapshot/sortBy
+             * @on snapshot/:namespace/sortBy
              */
-            socket.on('snapshot/sortBy', function (data) {
+            socket.on('snapshot/' + this.namespace + '/sortBy', function (data) {
                 this.setSortBy(data);
             }.bind(this));
 
@@ -146,7 +158,7 @@
 
             }.bind(this));
 
-            // Emit the `snapshot/contentUpdated` event because we've loaded
+            // Emit the `snapshot/:namespace/contentUpdated` event because we've loaded
             // the collection into memory.
             this._emitContentUpdated();
 
@@ -154,7 +166,7 @@
 
         /**
          * @method _emitContentUpdated
-         * @emit snapshot/contentUpdated
+         * @emit snapshot/:namespace/contentUpdated
          * Responsible for generating the content and firing the event to notify
          * the client of the current collection of models.
          * @private
@@ -218,7 +230,7 @@
 
             // Emits the event, passing the collection of models, and the time the
             // operation took to complete.
-            this.socket.emit('snapshot/contentUpdated', {
+            this.socket.emit('snapshot/' + this.namespace + '/contentUpdated', {
                 models: content,
                 stats: {
                     pages: {
@@ -244,8 +256,8 @@
 
         /**
          * @method setPerPage
-         * @emit snapshot/contentUpdated
-         * @param value {Number}
+         * @emit snapshot/:namespace/contentUpdated
+         * @param perPage {Number}
          * @return {void}
          */
         setPerPage: function setPerPage(perPage) {
@@ -255,7 +267,7 @@
 
         /**
          * @method setPageNumber
-         * @emit snapshot/contentUpdated
+         * @emit snapshot/:namespace/contentUpdated
          * @param value {Number}
          * @return {void}
          */
@@ -266,7 +278,7 @@
 
         /**
          * @method setSortBy
-         * @emit snapshot/contentUpdated
+         * @emit snapshot/:namespace/contentUpdated
          * @param options {Array}
          * @return {void}
          */
@@ -295,7 +307,7 @@
          * @method applyFilter
          * @param key {String}
          * @param filterMethod {Function}
-         * @emit snapshot/contentUpdated
+         * @emit snapshot/:namespace/contentUpdated
          * Responsible for applying a filter on any given dimension by its key name.
          * @return {void}
          */
@@ -311,7 +323,7 @@
         /**
          * @method clearFilter
          * @param key {String}
-         * @emit snapshot/contentUpdated
+         * @emit snapshot/:namespace/contentUpdated
          * Responsible for clearing a filter based on its key.
          * @return {void}
          */
@@ -325,7 +337,7 @@
 
         /**
          * @method clearFilters
-         * @emit snapshot/contentUpdated
+         * @emit snapshot/:namespace/contentUpdated
          * Responsible for clearing the filters of every single dimension.
          * @return {void}
          */

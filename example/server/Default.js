@@ -8,7 +8,7 @@ var io          = require('socket.io').listen(8888),
 io.sockets.on('connection', function (socket) {
 
     // Bootstrap Snapshot passing in the reference for the socket as a dependency.
-    var $snapshot = new Snapshot().bootstrap(socket).useDelta(false);
+    var $snapshot = new Snapshot('default').bootstrap(socket).useDelta(false);
 
     // Configure the defaults.
     $snapshot.setPerPage(10);
