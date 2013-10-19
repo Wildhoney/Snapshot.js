@@ -23,9 +23,9 @@ io.sockets.on('connection', function (socket) {
 
     request(url, function (error, response, content) {
 
-        if (!error && response.statusCode == 200) {
+        if (!error && response.statusCode === 200) {
 
-            // When the request is successful, pass the collection to Snapshot's `setData`
+            // When the request is successful, pass the collection to Snapshot's `setCollection`
             // after parsing the JSON document.
             var json = JSON.parse(content);
             $snapshot.setCollection(json);
