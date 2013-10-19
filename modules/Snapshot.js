@@ -18,6 +18,7 @@
         // Reset items for each instantiation.
         this.crossfilter    = null;
         this.dimensions     = {};
+        this.memory         = {};
 
     };
 
