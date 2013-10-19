@@ -42,7 +42,7 @@ Snapshot listens for three events natively, and these are handled automatically.
 
 As Snapshot supports multiple instances, a namespace is used to distinguish the events. If you don't explicitly specify a namespace in the instantiation then it will be `default`. Therefore all of your events will be: `snapshot/default/perPage`, `snapshot/default/pageNumber` and `snapshot/default/sortBy`.
 
-<small>(`:namespace` is the name you provided upon instantiation of `Snapshot`.)</small>
+<small>(`:namespace` is the name you provided upon instantiation of `Snapshot` &ndash; if you didn't, then it's `default`.)</small>
 
 When the collection has been updated, Snapshot emits the `snapshot/:namespace/contentUpdated` event, passing through the snapshot as the first argument.
 
