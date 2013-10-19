@@ -5,19 +5,19 @@ describe('Snapshot.js', function() {
 
     var $snapshot;
 
-    beforeEach(function() {
-
-        var socketMock = { on: function() {}, emit: function() {} };
-
-        $snapshot = new Snapshot('default').bootstrap(socketMock).useDelta(false);
-        $snapshot.setSortBy({ key: 'name', direction: 'ascending' });
-        $snapshot.setCollection([ { id: 1, name: 'Adam' }, { id: 2, name: 'Masha' }, { id: 3, name: 'Karl' },
-                                  { id: 4, name: 'Brian' }, { id: 5, name: 'Simon' }, { id: 6, name: 'Artem' }],
-                                  'id', true);
-
-    });
-
     describe('Basic', function() {
+
+        beforeEach(function() {
+
+            var socketMock = { on: function() {}, emit: function() {} };
+
+            $snapshot = new Snapshot('default').bootstrap(socketMock).useDelta(false);
+            $snapshot.setSortBy({ key: 'name', direction: 'ascending' });
+            $snapshot.setCollection([ { id: 1, name: 'Adam' }, { id: 2, name: 'Masha' }, { id: 3, name: 'Karl' },
+                { id: 4, name: 'Brian' }, { id: 5, name: 'Simon' }, { id: 6, name: 'Artem' }],
+                'id', true);
+
+        });
 
         it('Should assume a default namespace if not specified', function() {
             $snapshot = new Snapshot();
@@ -85,6 +85,69 @@ describe('Snapshot.js', function() {
 
             $snapshot.bootstrap(socketMock);
             $snapshot.clearFilter('name');
+
+        });
+
+    });
+
+    describe('WebSockets', function() {
+
+        var $snapshot, ioServer = require('socket.io').listen(8889, { log: false });
+        var ioClient = require('socket.io-client');
+
+        beforeEach(function() {
+
+            ioServer.sockets.on('connection', function (socket) {
+
+                $snapshot = new Snapshot('default').bootstrap(socket).useDelta(false);
+                $snapshot.setSortBy({ key: 'name', direction: 'ascending' });
+                $snapshot.setCollection([{ id: 1, name: 'Adam' }, { id: 2, name: 'Masha' }, { id: 3, name: 'Karl' },
+                    { id: 4, name: 'Brian' }, { id: 5, name: 'Simon' }, { id: 6, name: 'Artem' }],
+                    'id', true);
+
+            });
+
+        });
+
+        describe('Native Events', function() {
+
+            var $client;
+
+            beforeEach(function() {
+
+                $client = ioClient.connect('http://0.0.0.0:8889', {
+                    transports: ['websocket'],
+                    'force new connection': true
+                });
+
+            });
+
+            it('Should change the models per page on event', function() {
+                $client.emit('snapshot/default/perPage', 3);
+                $client.on('snapshot/default/contentUpdated', function(data) {
+                    $snapshot.perPage.should.equal(3);
+                    data.models.should.have.lengthOf(3);
+                });
+            });
+
+            it('Should change the page number on event', function() {
+                $client.emit('snapshot/default/pageNumber', 1);
+                $client.on('snapshot/default/contentUpdated', function(data) {
+                    $snapshot.pageNumber.should.equal(1);
+                    data.models.should.have.lengthOf(6);
+                });
+            });
+
+            it('Should change the sorting order on event', function() {
+                $client.emit('snapshot/default/sortBy', {
+                    key: 'name',
+                    direction: 'descending'
+                });
+                $client.on('snapshot/default/contentUpdated', function(data) {
+                    data.models.should.have.lengthOf(6);
+                    data.models[0].name.should.equal('Simon');
+                });
+            });
 
         });
 
