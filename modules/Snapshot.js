@@ -314,7 +314,7 @@
         applyFilter: function applyFilter(key, filterMethod) {
 
             var dimension = this.dimensions[key];
-            this.clearFilter(key);
+            dimension.filterAll();
             filterMethod.call(this, dimension);
             this._emitContentUpdated();
 
