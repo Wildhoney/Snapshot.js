@@ -3,8 +3,7 @@
     "use strict";
 
     var crossfilter = require('crossfilter'),
-        _           = require('underscore'),
-        io          = require('socket.io');
+        _           = require('underscore');
 
     /**
      * @module Snapshot
@@ -101,9 +100,6 @@
          */
         bootstrap: function bootstrap(socket) {
 
-
-            console.log(socket.id);
-
             // Keep a reference to the socket for emitting purposes.
             this.socket = socket;
 
@@ -112,6 +108,7 @@
              */
             socket.on(['snapshot', this.namespace, 'perPage'].join('/'), function (data) {
                 this.setPerPage(data);
+                this._emitContentUpdated();
             }.bind(this));
 
             /**
@@ -119,6 +116,7 @@
              */
             socket.on(['snapshot', this.namespace, 'pageNumber'].join('/'), function (data) {
                 this.setPageNumber(data);
+                this._emitContentUpdated();
             }.bind(this));
 
             /**
@@ -126,6 +124,7 @@
              */
             socket.on(['snapshot', this.namespace, 'sortBy'].join('/'), function (data) {
                 this.setSortBy(data);
+                this._emitContentUpdated();
             }.bind(this));
 
             return this;
@@ -189,8 +188,6 @@
                 // Crossfilter yet.
                 return;
             }
-
-            console.log(this.pageNumber);
 
             // Determine whether to use `top` or `bottom` depending on direction.
             var sortingMethod = 'top';
@@ -275,7 +272,6 @@
          */
         setPerPage: function setPerPage(perPage) {
             this.perPage = perPage;
-            this._emitContentUpdated();
         },
 
         /**
@@ -286,7 +282,6 @@
          */
         setPageNumber: function setPageNumber(pageNumber) {
             this.pageNumber = pageNumber;
-            this._emitContentUpdated();
         },
 
         /**
@@ -311,8 +306,6 @@
                 key         : options.key,
                 direction   : options.direction || invertDirection()
             };
-
-            this._emitContentUpdated();
 
         },
 

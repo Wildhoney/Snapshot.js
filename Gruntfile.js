@@ -17,14 +17,23 @@ module.exports = function(grunt) {
                 src: ['modules/Snapshot.js'],
                 dest: 'dist/<%= pkg.buildName %>.min.js'
             }
+        },
+        mochaTest: {
+            test: {
+                options: {
+                    reporter: 'spec'
+                },
+                src: ['tests/*.js']
+            }
         }
     });
 
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-jshint');
+    grunt.loadNpmTasks('grunt-mocha-test');
 
     grunt.registerTask('build', ['uglify']);
-    grunt.registerTask('test', ['jshint']);
+    grunt.registerTask('test', ['mochaTest', 'jshint']);
     grunt.registerTask('default', ['jshint', 'uglify']);
 
 };

@@ -14,7 +14,7 @@ All dependencies can be installed with `bower install` and `npm install`, howeve
  * <a href="http://underscorejs.org/">Underscore.js</a> (server);
  * <a href="http://nodejs.org/">Node.js</a> (server);
  * <a href="http://square.github.io/crossfilter/">Crossfilter</a> (server);
- * <a href="http://pivotal.github.io/jasmine/">Jasmine</a> (grunt);
+ * <a href="http://visionmedia.github.io/mocha/">Mocha</a> &ndash; with Should.js (grunt);
 
 Quick Start
 -----------
@@ -162,7 +162,7 @@ Below is a simple diagram of how Snapshot works. It demonstrates how the `snapsh
 Unit Testing
 -----------
 
-Grunt is a prerequisite to run the Jasmine tests, which is installed when you run `npm install`. Afterwards all of Snapshot's unit tests can be run with the `grunt test` command from the terminal.
+Grunt is a prerequisite to run the Mocha tests, which is installed when you run `npm install`. Afterwards all of Snapshot's unit tests can be run with the `grunt test` command from the terminal.
 
 Angular
 -----------
