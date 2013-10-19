@@ -102,21 +102,21 @@
             /**
              * @on snapshot/:namespace/perPage
              */
-            socket.on('snapshot/' + this.namespace + '/perPage', function (data) {
+            socket.on(['snapshot', this.namespace, 'perPage'].join('/'), function (data) {
                 this.setPerPage(data);
             }.bind(this));
 
             /**
              * @on snapshot/:namespace/pageNumber
              */
-            socket.on('snapshot/' + this.namespace + '/pageNumber', function (data) {
+            socket.on(['snapshot', this.namespace, 'pageNumber'].join('/'), function (data) {
                 this.setPageNumber(data);
             }.bind(this));
 
             /**
              * @on snapshot/:namespace/sortBy
              */
-            socket.on('snapshot/' + this.namespace + '/sortBy', function (data) {
+            socket.on(['snapshot', this.namespace, 'sortBy'].join('/'), function (data) {
                 this.setSortBy(data);
             }.bind(this));
 
@@ -230,7 +230,7 @@
 
             // Emits the event, passing the collection of models, and the time the
             // operation took to complete.
-            this.socket.emit('snapshot/' + this.namespace + '/contentUpdated', {
+            this.socket.emit(['snapshot', this.namespace, 'contentUpdated'].join('/'), {
                 models: content,
                 stats: {
                     pages: {
