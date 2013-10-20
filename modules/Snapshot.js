@@ -4,6 +4,7 @@
 
     var crossfilter = require('crossfilter'),
         _           = require('underscore');
+                      require('colors');
 
     /**
      * @module Snapshot
@@ -19,6 +20,9 @@
         this.crossfilter    = null;
         this.dimensions     = {};
         this.memory         = {};
+        this.socket         = { emit: function() {
+            this._printMessage('negative', 'You have not attached the socket.');
+        }.bind(this)}
 
     };
 
@@ -197,7 +201,7 @@
             }
 
             var start       = new Date().getTime(),
-                content     = this.dimensions[this.sorting.key][sortingMethod](Infinity),
+                content     = this.dimensions[this.sorting.key || this.primaryKey][sortingMethod](Infinity),
                 totalModels = content.length,
                 totalPages  = (totalModels / this.perPage < 0) ?
                               0 : Math.ceil(totalModels / this.perPage);
@@ -321,6 +325,12 @@
         applyFilter: function applyFilter(key, filterMethod) {
 
             var dimension = this.dimensions[key];
+
+            if (!dimension) {
+                this._printMessage('negative', 'Invalid column name found: "' + key + '".');
+                return;
+            }
+
             dimension.filterAll();
             filterMethod.call(this, dimension);
             this._emitContentUpdated();
@@ -337,6 +347,12 @@
         clearFilter: function clearFilter(key) {
 
             var dimension = this.dimensions[key];
+
+            if (!dimension) {
+                this._printMessage('negative', 'Invalid column name found: "' + key + '".');
+                return;
+            }
+
             dimension.filterAll();
             this._emitContentUpdated();
 
@@ -354,6 +370,26 @@
                 dimension.filterAll();
             });
             this._emitContentUpdated();
+
+        },
+
+        /**
+         * @method _printMessage
+         * @param type {String}
+         * @param message {String}
+         * @private
+         */
+        _printMessage: function(type, message) {
+
+            var title = '';
+
+            switch (type) {
+                case ('positive'): title  = '   ok    - '.green; break;
+                case ('negative'): title  = '   error - '.red; break;
+                case ('neutral'): title    = '   info  - '.cyan; break;
+            }
+
+            console.log(title + 'Snapshot.js - '.bold.grey + message.white);
 
         }
 
