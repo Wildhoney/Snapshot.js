@@ -106,7 +106,19 @@ var $cats       = new Snapshot('cats').bootstrap(socket).useDelta(false);
 var $rabbits    = new Snapshot('rabbits').bootstrap(socket).useDelta(false);
 ```
 
-If you don't create a namespace, the namespace will be set to `default`.
+In the above example Snapshot will have 9 events to listen to (3 events * 3 snapshots):
+
+ * `snapshot/dogs/perPage`, `snapshot/dogs/pageNumber`, `snapshot/dogs/sortBy`
+ * `snapshot/cats/perPage`, `snapshot/cats/pageNumber`, `snapshot/cats/sortBy`
+ * `snapshot/rabbits/perPage`, `snapshot/rabbits/pageNumber`, `snapshot/rabbits/sortBy`
+
+And it will emit 3 events:
+
+ * `snapshot/dogs/contentUpdated`
+ * `snapshot/cats/contentUpdated`
+ * `snapshot/rabbits/contentUpdated`
+
+If you don't create a namespace then the namespace will be set to `default`.
 
 Delta Updates
 -----------
