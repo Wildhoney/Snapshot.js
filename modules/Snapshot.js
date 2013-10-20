@@ -133,7 +133,7 @@
             }.bind(this));
 
             /**
-             * @on snapshot/:namespace/fuzzyExact
+             * @on snapshot/:namespace/exactFilter
              */
             socket.on(['snapshot', this.namespace, 'exactFilter'].join('/'), function (key, value) {
 
