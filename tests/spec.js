@@ -105,7 +105,7 @@ describe('Snapshot.js', function() {
 
         });
 
-        describe('Native Events', function() {
+        describe('Filtering Events', function() {
 
             var $client;
 
@@ -122,49 +122,86 @@ describe('Snapshot.js', function() {
 
             });
 
-            it('Should change the models per page on event', function() {
-                $client.emit('snapshot/default/perPage', 3);
-                $client.on('snapshot/default/contentUpdated', function(data) {
-                    $snapshot.perPage.should.equal(3);
-                    data.models.should.have.lengthOf(3);
+            describe('Paging', function() {
+
+                it('Should change the models per page on event', function() {
+                    $client.emit('snapshot/default/perPage', 3);
+                    $client.on('snapshot/default/contentUpdated', function(data) {
+                        $snapshot.perPage.should.equal(3);
+                        data.models.should.have.lengthOf(3);
+                    });
                 });
+
+                it('Should change the page number on event', function() {
+                    $client.emit('snapshot/default/pageNumber', 1);
+                    $client.on('snapshot/default/contentUpdated', function(data) {
+                        $snapshot.pageNumber.should.equal(1);
+                        data.models.should.have.lengthOf(6);
+                    });
+                });
+
+                it('Should change the sorting order on event', function() {
+                    $client.emit('snapshot/default/sortBy', 'name', 'descending');
+                    $client.on('snapshot/default/contentUpdated', function(data) {
+                        data.models.should.have.lengthOf(6);
+                        data.models[0].name.should.equal('Simon');
+                    });
+                });
+
+                it('Should store the IDs for those already sent', function() {
+                    $snapshot.memory['1'] = 1;
+                    $client.on('snapshot/default/contentUpdated', function(data) {
+                        $snapshot.memory.should.be.instanceOf(Object);
+                        $snapshot.memory.should.have.property('3');
+                        data.models[0].should.equal('1');
+                    });
+                });
+
+                it('Should provide delta models for those already sent', function() {
+                    $snapshot.useDelta(true);
+                    $snapshot.delta.should.equal(true);
+
+                    $client.emit('snapshot/default/pageNumber', 1);
+                    $client.on('snapshot/default/contentUpdated', function(data) {
+                        $snapshot.memory.should.be.instanceOf(Object);
+                        $snapshot.memory.should.have.property('3');
+                        data.models[0].name.should.equal('Adam');
+                    });
+                });
+
             });
 
-            it('Should change the page number on event', function() {
-                $client.emit('snapshot/default/pageNumber', 1);
-                $client.on('snapshot/default/contentUpdated', function(data) {
-                    $snapshot.pageNumber.should.equal(1);
-                    data.models.should.have.lengthOf(6);
-                });
-            });
+            describe('Filtering', function() {
 
-            it('Should change the sorting order on event', function() {
-                $client.emit('snapshot/default/sortBy', 'name', 'descending');
-                $client.on('snapshot/default/contentUpdated', function(data) {
-                    data.models.should.have.lengthOf(6);
-                    data.models[0].name.should.equal('Simon');
+                it('Should filter the collection by name exactly', function() {
+                    $client.emit('snapshot/default/exactFilter', 'name', 'Adam');
+                    $client.on('snapshot/default/contentUpdated', function(data) {
+                        data.models.should.have.lengthOf(1);
+                        data.models[0].name.should.equal('Adam');
+                    });
                 });
-            });
 
-            it('Should store the IDs for those already sent', function() {
-                $snapshot.memory['1'] = 1;
-                $client.on('snapshot/default/contentUpdated', function(data) {
-                    $snapshot.memory.should.be.instanceOf(Object);
-                    $snapshot.memory.should.have.property('3');
-                    data.models[0].should.equal('1');
+                it('Should filter the collection by name fuzzily', function() {
+                    $client.emit('snapshot/default/fuzzyFilter', 'name', 'A');
+                    $client.on('snapshot/default/contentUpdated', function(data) {
+                        data.models.should.have.lengthOf(5);
+                        data.models[0].name.should.equal('Adam');
+                        data.models[1].name.should.equal('Artem');
+                        data.models[2].name.should.equal('Brian');
+                        data.models[3].name.should.equal('Karl');
+                        data.models[4].name.should.equal('Masha');
+                    });
                 });
-            });
 
-            it('Should provide delta models for those already sent', function() {
-                $snapshot.useDelta(true);
-                $snapshot.delta.should.equal(true);
-
-                $client.emit('snapshot/default/pageNumber', 1);
-                $client.on('snapshot/default/contentUpdated', function(data) {
-                    $snapshot.memory.should.be.instanceOf(Object);
-                    $snapshot.memory.should.have.property('3');
-                    data.models[0].name.should.equal('Adam');
+                it('Should filter the collection by ID range', function() {
+                    $client.emit('snapshot/default/rangeFilter', 'id', [2,4]);
+                    $client.on('snapshot/default/contentUpdated', function(data) {
+                        data.models.should.have.lengthOf(2);
+                        data.models[0].id.should.equal(3);
+                        data.models[1].id.should.equal(2);
+                    });
                 });
+
             });
 
         });
