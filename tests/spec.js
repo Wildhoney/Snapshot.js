@@ -105,7 +105,7 @@ describe('Snapshot.js', function() {
 
         });
 
-        describe('Filtering Events', function() {
+        describe('Events', function() {
 
             var $client;
 
