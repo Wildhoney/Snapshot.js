@@ -129,7 +129,7 @@ There may be instances where sending delta updates is preferable to re-sending w
 var $snapshot = new Snapshot().bootstrap(socket).useDelta(true);
 ```
 
-Once you've enabled delta updates using `useDelta(true)` as part of the bootstrap process, Snapshot will keeps a history of transmitted models. It's crucial that you set the appropriate primary ID when invoking `setCollection`, otherwise a default primary key will be assumed.
+Once you've enabled delta updates using `useDelta(true)` as part of the bootstrap process, Snapshot will keep a history of transmitted models. It's crucial that you set the appropriate primary ID when invoking `setCollection`, otherwise a default primary key will be assumed.
 
 ```javascript
 $snapshot.setCollection([{ id: 1 }, { id: 2 }, { id: 3 }], 'id');
@@ -142,7 +142,7 @@ Delta models are nothing more than the primary key of the model, which will help
 ```javascript
 socket.on('snapshot/:namespace/contentUpdated', function(data) {
 
-    _.forEach(data, function(model) {
+    _.forEach(data.models, function(model) {
 
         if (_.isNumber(model)) {
             // Delta model!
@@ -161,7 +161,7 @@ Architecture
 
 Below is a simple diagram of how Snapshot works. It demonstrates how the `snapshot/:namespace/pageNumber` event operates &ndash; which is also the same way other native Snapshot events function. It also demonstrates the flow of custom filters.
 
-<img src="http://oi42.tinypic.com/v33vb9.jpg alt="Snapshot Architecture" />
+<img src="http://i.imgur.com/6o0Nw5Y.png" alt="Snapshot Architecture" />
 
  * Browser establishes a WebSocket connection to Node.js &ndash; models are added;
  * Browser emits `snapshot/:namespace/pageNumber` event with data (example);
