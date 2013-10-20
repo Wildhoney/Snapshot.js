@@ -3,8 +3,7 @@ Snapshot.js
 
 Node.js app for slicing and dicing paginated chunks of data with easy sorting and filtering.
 
-<img src="https://travis-ci.org/Wildhoney/Snapshot.js.png?branch=master" alt="Travis CI" />
-
+<img src="https://travis-ci.org/Wildhoney/Snapshot.js.png?branch=master" alt="Travis CI" style="margin-right: 10px;" />
 <img src="https://badge.fury.io/js/snapshot-js.png" alt="NPM Version" />
 
 Installing via npm
