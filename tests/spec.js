@@ -12,7 +12,7 @@ describe('Snapshot.js', function() {
             var socketMock = { on: function() {}, emit: function() {} };
 
             $snapshot = new Snapshot('default').bootstrap(socketMock).useDelta(false);
-            $snapshot.setSortBy({ key: 'name', direction: 'ascending' });
+            $snapshot.setSortBy('name', 'ascending');
             $snapshot.setCollection([ { id: 1, name: 'Adam' }, { id: 2, name: 'Masha' }, { id: 3, name: 'Karl' },
                 { id: 4, name: 'Brian' }, { id: 5, name: 'Simon' }, { id: 6, name: 'Artem' }],
                 'id', true);
@@ -48,17 +48,11 @@ describe('Snapshot.js', function() {
             $snapshot.setPageNumber(5);
             $snapshot.pageNumber.should.equal(5);
 
-            $snapshot.setSortBy({
-                key: 'name',
-                direction: false
-            });
+            $snapshot.setSortBy('name', false);
             $snapshot.sorting.key.should.equal('name');
             $snapshot.sorting.direction.should.equal('descending');
 
-            $snapshot.setSortBy({
-                key: 'id',
-                direction: 'descending'
-            });
+            $snapshot.setSortBy('id', 'descending');
             $snapshot.sorting.key.should.equal('id');
             $snapshot.sorting.direction.should.equal('descending');
 
@@ -100,7 +94,7 @@ describe('Snapshot.js', function() {
             ioServer.sockets.on('connection', function (socket) {
 
                 $snapshot = new Snapshot('default').bootstrap(socket).useDelta(false);
-                $snapshot.setSortBy({ key: 'name', direction: 'ascending' });
+                $snapshot.setSortBy('name', 'ascending');
                 $snapshot.setCollection([{ id: 1, name: 'Adam' }, { id: 2, name: 'Masha' }, { id: 3, name: 'Karl' },
                     { id: 4, name: 'Brian' }, { id: 5, name: 'Simon' }, { id: 6, name: 'Artem' }],
                     'id', true);
@@ -145,10 +139,7 @@ describe('Snapshot.js', function() {
             });
 
             it('Should change the sorting order on event', function() {
-                $client.emit('snapshot/default/sortBy', {
-                    key: 'name',
-                    direction: 'descending'
-                });
+                $client.emit('snapshot/default/sortBy', 'name', 'descending');
                 $client.on('snapshot/default/contentUpdated', function(data) {
                     data.models.should.have.lengthOf(6);
                     data.models[0].name.should.equal('Simon');

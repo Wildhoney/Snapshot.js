@@ -81,10 +81,7 @@
          * @return {void}
          */
         $scope.sortBy = function sortBy(property) {
-            socket.emit('snapshot/default/sortBy', {
-                key         : property,
-                direction   : false
-            });
+            socket.emit('snapshot/default/sortBy', property, false);
         };
 
         /**

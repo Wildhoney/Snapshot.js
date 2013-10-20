@@ -111,24 +111,24 @@
             /**
              * @on snapshot/:namespace/perPage
              */
-            socket.on(['snapshot', this.namespace, 'perPage'].join('/'), function (data) {
-                this.setPerPage(data);
+            socket.on(['snapshot', this.namespace, 'perPage'].join('/'), function (value) {
+                this.setPerPage(value);
                 this._emitContentUpdated();
             }.bind(this));
 
             /**
              * @on snapshot/:namespace/pageNumber
              */
-            socket.on(['snapshot', this.namespace, 'pageNumber'].join('/'), function (data) {
-                this.setPageNumber(data);
+            socket.on(['snapshot', this.namespace, 'pageNumber'].join('/'), function (value) {
+                this.setPageNumber(value);
                 this._emitContentUpdated();
             }.bind(this));
 
             /**
              * @on snapshot/:namespace/sortBy
              */
-            socket.on(['snapshot', this.namespace, 'sortBy'].join('/'), function (data) {
-                this.setSortBy(data);
+            socket.on(['snapshot', this.namespace, 'sortBy'].join('/'), function (key, direction) {
+                this.setSortBy(key, direction);
                 this._emitContentUpdated();
             }.bind(this));
 
@@ -336,10 +336,11 @@
         /**
          * @method setSortBy
          * @emit snapshot/:namespace/contentUpdated
-         * @param options {Array}
+         * @param key {String}
+         * @param direction {String|Boolean}
          * @return {void}
          */
-        setSortBy: function setSortBy(options) {
+        setSortBy: function setSortBy(key, direction) {
 
             /**
              * @method invertDirection
@@ -352,8 +353,8 @@
             }.bind(this);
 
             this.sorting = {
-                key         : options.key,
-                direction   : options.direction || invertDirection()
+                key         : key,
+                direction   : direction || invertDirection()
             };
 
         },

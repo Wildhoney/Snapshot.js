@@ -51,13 +51,10 @@ As Snapshot supports multiple instances, a namespace is used to distinguish the 
 
 When the collection has been updated, Snapshot emits the `snapshot/:namespace/contentUpdated` event, passing through the snapshot as the first argument.
 
-For sorting by any given column, you can emit the `snapshot/:namespace/sortBy` event with a simple hash. If you omit the `direction` property (or set its value to `false`) then Snapshot will cleverly invert the current sorting direction for you.
+For sorting by any given column, you can emit the `snapshot/:namespace/sortBy` event passing in the `key` and `direction` (ascending/descending). If you omit the `direction` property (or set its value to `false`) then Snapshot will cleverly invert the current sorting direction for you.
 
 ```javascript
-socket.emit('snapshot/:namespace/sortBy', {
-    key         : property,
-    direction   : 'descending'
-});
+socket.emit('snapshot/:namespace/sortBy', property, 'descending');
 ```
 
 Filtering
