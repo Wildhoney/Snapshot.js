@@ -132,6 +132,50 @@
                 this._emitContentUpdated();
             }.bind(this));
 
+            /**
+             * @on snapshot/:namespace/fuzzyExact
+             */
+            socket.on(['snapshot', this.namespace, 'exactFilter'].join('/'), function (key, value) {
+
+                this.applyFilter(key, function(dimension) {
+                    dimension.filterExact(value);
+                });
+
+                this._emitContentUpdated();
+
+            }.bind(this));
+
+            /**
+             * @on snapshot/:namespace/fuzzyFilter
+             */
+            socket.on(['snapshot', this.namespace, 'fuzzyFilter'].join('/'), function (key, value) {
+
+                this.applyFilter(key, function(dimension) {
+
+                    dimension.filterFunction(function(d) {
+                        var regExp = new RegExp(value, 'i');
+                        return d.match(regExp);
+                    });
+
+                });
+
+                this._emitContentUpdated();
+
+            }.bind(this));
+
+            /**
+             * @on snapshot/:namespace/rangeFilter
+             */
+            socket.on(['snapshot', this.namespace, 'rangeFilter'].join('/'), function (key, range) {
+
+                this.applyFilter(key, function(dimension) {
+                    dimension.filterRange(range);
+                });
+
+                this._emitContentUpdated();
+
+            }.bind(this));
+
             return this;
 
         },

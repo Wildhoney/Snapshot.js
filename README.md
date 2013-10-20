@@ -63,7 +63,7 @@ socket.emit('snapshot/:namespace/sortBy', {
 Filtering
 -----------
 
-In addition to sorting and limiting, Snapshot also allows for the filtering of the collection. For this you can use the `applyFilter` filter method. Unfortunately you will need to read <a href="https://github.com/square/crossfilter/wiki/API-Reference" target="_blank">Crossfilter's API Reference</a> before you begin filtering &ndash; or you can use Snapshot's primitive in-built filters.
+In addition to sorting and limiting, Snapshot also allows for the filtering of the collection. For this you can use the `applyFilter` filter method. Unfortunately you will need to read <a href="https://github.com/square/crossfilter/wiki/API-Reference" target="_blank">Crossfilter's API Reference</a> before you begin filtering &ndash; or you can use Snapshot's <a href="#in-built-filters">primitive in-built filters</a>.
 
 ```javascript
 socket.emit('filterByWord', text);
@@ -102,6 +102,17 @@ $snapshot.clearFilters();
 
 <h3>In-Built Filters</h3>
 
+In light of Crossfilter's learning curve, Snapshot comes bundled with a handful of in-built filters for common filtering techniques. These can all be invoked by emitting an event with a corresponding value.
+
+ * `snapshot/:namespace/fuzzyFilter` `{String}`
+ * `snapshot/:namespace/exactFilter` `{String}`
+ * `snapshot/:namespace/rangeFilter` `{Array}`
+
+```javascript
+socket.emit('snapshot/default/fuzzyFilter', 'word', 'abc');
+```
+
+Each in-built filter expects the event name (`snapshot/default/fuzzyFilter`), the key (`word`), and value (`abc`).
 
 Multiple Instances
 -----------

@@ -93,7 +93,8 @@
          * @return {void}
          */
         $scope.applyFilter = function applyFilter(text) {
-            socket.emit('applyFilterByWord', text);
+//            socket.emit('applyFilterByWord', text);
+            socket.emit('snapshot/default/exactFilter', 'word', text);
         };
 
         /**
