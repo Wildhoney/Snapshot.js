@@ -21,26 +21,6 @@ All dependencies can be installed with `bower install` and `npm install`, howeve
  * <a href="http://square.github.io/crossfilter/">Crossfilter</a> (server);
  * <a href="http://visionmedia.github.io/mocha/">Mocha</a> &ndash; with Should.js (grunt);
 
-Philosophy
------------
-
-Loading a large collection of models into the browser is slow and unnecessary, instead Snapshot uses WebSockets to serve snapshots of those models to the browser when requested. It retains the state of the models, and so if a filter is changed, or the page number incremented, it will modify the snapshot <strong>only</strong> for that client.
-
-Snapshot is also tremendously fast because of its use of Socket.io and Crossfilter. Snapshot listens for events to change the state of the collection of models, and fires another event to let the client know the snapshot was updated. Crossfilter allows Snapshot to quickly slice and dice models &ndash; in the example, slicing and dicing takes 0-1 milliseconds for 1,000 models.
-
-Since Snapshot uses Node.js, the browser support is that of Socket.io, which essentially means Snapshot supports Internet Explorer 5.5+.
-
- <h3>Example</h3>
-
- * Browser connects to Snapshot on Node.js server;
- * Snapshot emits `snapshot/default/contentUpdated` with first page's 50 models;
- * Browser changes increments the page number;
- * Snapshot emits `snapshot/default/contentUpdated` with second page's 50 models;
- * Browser applies filter to select only red items;
- * Snapshot emits `snapshot/default/contentUpdated` to supply second page's red models;
- * Browser sorts the models by their colour;
- * Snapshot emits `snapshot/default/contentUpdated` to supply second page's red models ordered globally by colour;
-
 Quick Start
 -----------
 
@@ -219,6 +199,26 @@ Unit Testing
 -----------
 
 Grunt is a prerequisite to run the Mocha tests, which is installed when you run `npm install`. Afterwards all of Snapshot's unit tests can be run with the `grunt test` command from the terminal.
+
+Philosophy
+-----------
+
+Loading a large collection of models into the browser is slow and unnecessary, instead Snapshot uses WebSockets to serve snapshots of those models to the browser when requested. It retains the state of the models, and so if a filter is changed, or the page number incremented, it will modify the snapshot <strong>only</strong> for that client.
+
+Snapshot is also tremendously fast because of its use of Socket.io and Crossfilter. Snapshot listens for events to change the state of the collection of models, and fires another event to let the client know the snapshot was updated. Crossfilter allows Snapshot to quickly slice and dice models &ndash; in the example, slicing and dicing takes 0-1 milliseconds for 1,000 models.
+
+Since Snapshot uses Node.js, the browser support is that of Socket.io, which essentially means Snapshot supports Internet Explorer 5.5+.
+
+ <h3>Example</h3>
+
+ * Browser connects to Snapshot on Node.js server;
+ * Snapshot emits `snapshot/default/contentUpdated` with first page's 50 models;
+ * Browser increments the page number;
+ * Snapshot emits `snapshot/default/contentUpdated` with second page's 50 models;
+ * Browser applies filter to select only red items;
+ * Snapshot emits `snapshot/default/contentUpdated` to supply second page's red models;
+ * Browser sorts the models by their colour;
+ * Snapshot emits `snapshot/default/contentUpdated` to supply second page's red models ordered globally by colour;
 
 Angular
 -----------
