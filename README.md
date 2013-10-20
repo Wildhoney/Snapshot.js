@@ -172,6 +172,14 @@ socket.on('snapshot/:namespace/contentUpdated', function(data) {
 });
 ```
 
+Example
+-----------
+
+Snapshot comes bundled with an example to get you started.
+
+ * Navigate to `example/server` and run `node default.js`;
+ * Open `example/client/index.html` in your browser;
+
 Architecture
 -----------
 
