@@ -63,7 +63,7 @@ socket.emit('snapshot/:namespace/sortBy', {
 Filtering
 -----------
 
-In addition to sorting and limiting, Snapshot also allows for the filtering of the collection. For this you can use the `applyFilter` filter method. Unfortunately you will need to read <a href="https://github.com/square/crossfilter/wiki/API-Reference" target="_blank">Crossfilter's API Reference</a> before you begin filtering.
+In addition to sorting and limiting, Snapshot also allows for the filtering of the collection. For this you can use the `applyFilter` filter method. Unfortunately you will need to read <a href="https://github.com/square/crossfilter/wiki/API-Reference" target="_blank">Crossfilter's API Reference</a> before you begin filtering &ndash; or you can use Snapshot's primitive in-built filters.
 
 ```javascript
 socket.emit('filterByWord', text);
@@ -99,6 +99,9 @@ You can also clear every single filter by using the `clearFilters` method.
 ```javascript
 $snapshot.clearFilters();
 ```
+
+<h3>In-Built Filters</h3>
+
 
 Multiple Instances
 -----------
