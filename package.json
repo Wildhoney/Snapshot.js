@@ -29,6 +29,7 @@
     "should": "~2.0.1",
     "socket.io-client": "~0.9.16",
     "grunt-mocha-test": "~0.7.0",
-    "colors": "~0.6.2"
+    "colors": "~0.6.2",
+    "grunt-contrib-copy": "~0.4.1"
   }
 }
