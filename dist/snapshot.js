@@ -22,7 +22,7 @@
         this.memory         = {};
         this.socket         = { emit: function() {
             this._printMessage('negative', 'You have not attached the socket.');
-        }.bind(this)}
+        }.bind(this)};
 
     };
 
@@ -337,7 +337,7 @@
          * @return {void}
          */
         setPerPage: function setPerPage(perPage) {
-            this.perPage = perPage;
+            this.perPage = (perPage >= 0) ? perPage : 0;
         },
 
         /**
@@ -347,6 +347,14 @@
          * @return {Boolean}
          */
         setPageNumber: function setPageNumber(pageNumber) {
+
+            if (!this.crossfilter && pageNumber > 0) {
+                // If we haven't set the Crossfilter yet then we'll allow the developer
+                // to set the page number to whatever s/he wishes. Even if they set a ridiculous
+                // number, Crossfilter will simply return the last valid page.
+                this.pageNumber = pageNumber;
+                return;
+            }
 
             // Return false if the change to the `pageNumber` would put us out of bounds.
             if (pageNumber <= 0 || pageNumber > this.lastPageNumber) {
