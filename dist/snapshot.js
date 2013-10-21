@@ -353,7 +353,7 @@
                 // to set the page number to whatever s/he wishes. Even if they set a ridiculous
                 // number, Crossfilter will simply return the last valid page.
                 this.pageNumber = pageNumber;
-                return;
+                return false;
             }
 
             // Return false if the change to the `pageNumber` would put us out of bounds.
