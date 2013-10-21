@@ -247,8 +247,9 @@
             var start       = new Date().getTime(),
                 content     = this.dimensions[this.sorting.key || this.primaryKey][sortingMethod](Infinity),
                 totalModels = content.length,
-                totalPages  = (totalModels / this.perPage < 0) ?
-                              0 : Math.ceil(totalModels / this.perPage);
+                pageCount   = (totalModels / this.perPage < 0) ?
+                              0 : Math.ceil(totalModels / this.perPage),
+                totalPages  = Number.isFinite(pageCount) ? pageCount : 1;
 
             if (this.perPage !== 0) {
 
@@ -287,13 +288,19 @@
 
             }
 
+            if (this.pageNumber > totalPages) {
+                this.setPageNumber(totalPages);
+                this._emitContentUpdated();
+                return;
+            }
+
             // Emits the event, passing the collection of models, and the time the
             // operation took to complete.
             this.socket.emit(['snapshot', this.namespace, 'contentUpdated'].join('/'), {
                 models: content,
                 stats: {
                     pages: {
-                        total       : _.isNumber(totalPages) ? totalPages : 1,
+                        total       : totalPages,
                         current     : this.pageNumber,
                         perPage     : this.perPage || content.length
                     },
