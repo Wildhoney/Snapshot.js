@@ -152,8 +152,8 @@
 
                 this.applyFilter(key, function(dimension) {
 
+                    var regExp = new RegExp(value, 'i');
                     dimension.filterFunction(function(d) {
-                        var regExp = new RegExp(value, 'i');
                         return d.match(regExp);
                     });
 

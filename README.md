@@ -33,7 +33,7 @@ Once a WebSocket connection has been successfully established, you're able to bo
 var $snapshot = new Snapshot().bootstrap(socket).useDelta(false);
 ```
 
-You then need to tell Snapshot what collection it's going to be creating snapshots of. You can pass in an optional string for the `primaryKey` &ndash; if you omit the `primaryKey` then the first key of the first model is used.
+You then need to tell Snapshot which collection it's going to be creating snapshots of. You can pass in an optional string for the `primaryKey` &ndash; if you omit the `primaryKey` then the first key of the first model is used.
 
 ```javascript
 $snapshot.setCollection(collection, primaryKey);
@@ -62,7 +62,7 @@ socket.emit('snapshot/:namespace/sortBy', property, 'descending');
 Filtering
 -----------
 
-In addition to sorting and limiting, Snapshot also allows for the filtering of the collection. For this you can use the `applyFilter` filter method. Unfortunately you will need to read <a href="https://github.com/square/crossfilter/wiki/API-Reference" target="_blank">Crossfilter's API Reference</a> before you begin filtering &ndash; or you can use Snapshot's <a href="#in-built-filters">primitive in-built filters</a>.
+In addition to sorting and limiting, Snapshot also allows for the filtering of the collection. For this you can use the `applyFilter` method. Unfortunately you will need to read <a href="https://github.com/square/crossfilter/wiki/API-Reference" target="_blank">Crossfilter's API Reference</a> before you begin filtering &ndash; or for simple filtering you can use Snapshot's <a href="#in-built-filters">primitive in-built filters</a>.
 
 ```javascript
 socket.emit('filterByWord', text);
