@@ -69,6 +69,12 @@
         memory: {},
 
         /**
+         * @property lastPageNumber
+         * @type {Number}
+         */
+        lastPageNumber: 1,
+
+        /**
          * @property delta
          * @type {Boolean}
          * Whether or not to provide delta updates to the connected clients.
@@ -120,8 +126,13 @@
              * @on snapshot/:namespace/pageNumber
              */
             socket.on(['snapshot', this.namespace, 'pageNumber'].join('/'), function (value) {
-                this.setPageNumber(value);
-                this._emitContentUpdated();
+
+                var hasChanged = this.setPageNumber(value);
+
+                if (hasChanged) {
+                    this._emitContentUpdated();
+                }
+
             }.bind(this));
 
             /**
@@ -251,6 +262,10 @@
                               0 : Math.ceil(totalModels / this.perPage),
                 totalPages  = Number.isFinite(pageCount) ? pageCount : 1;
 
+            // Update `lastPageNumber` so that we can detect if any changes to `pageNumber` would
+            // place the content out of range.
+            this.lastPageNumber = totalPages;
+
             if (this.perPage !== 0) {
 
                 // Slice up the content according to the `pageNumber` and `perPage`.
@@ -296,25 +311,20 @@
 
             // Emits the event, passing the collection of models, and the time the
             // operation took to complete.
-            this.socket.emit(['snapshot', this.namespace, 'contentUpdated'].join('/'), {
-                models: content,
-                stats: {
-                    pages: {
-                        total       : totalPages,
-                        current     : this.pageNumber,
-                        perPage     : this.perPage || content.length
-                    },
-                    models: {
-                        total       : totalModels,
-                        current     : content.length
-                    },
-                    sort: {
-                        key         : this.sorting.key,
-                        direction   : this.sorting.direction
-                    }
+            this.socket.emit(['snapshot', this.namespace, 'contentUpdated'].join('/'), content, {
+                responseTime: (new Date().getTime() - start),
+                pages: {
+                    total       : totalPages,
+                    current     : this.pageNumber,
+                    perPage     : this.perPage || content.length
                 },
-                debug: {
-                    responseTime: (new Date().getTime() - start)
+                models: {
+                    total       : totalModels,
+                    current     : content.length
+                },
+                sort: {
+                    key         : this.sorting.key,
+                    direction   : this.sorting.direction
                 }
             });
 
@@ -334,10 +344,18 @@
          * @method setPageNumber
          * @emit snapshot/:namespace/contentUpdated
          * @param pageNumber {Number}
-         * @return {void}
+         * @return {Boolean}
          */
         setPageNumber: function setPageNumber(pageNumber) {
+
+            // Return false if the change to the `pageNumber` would put us out of bounds.
+            if (pageNumber <= 0 || pageNumber > this.lastPageNumber) {
+                return false;
+            }
+
             this.pageNumber = pageNumber;
+            return true;
+
         },
 
         /**

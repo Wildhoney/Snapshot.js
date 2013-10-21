@@ -21,12 +21,6 @@
         $scope.stats = {};
 
         /**
-         * @property debug
-         * @type {Object}
-         */
-        $scope.debug = {};
-
-        /**
          * @property filter
          * @type {String}
          */
@@ -38,12 +32,11 @@
         /**
          * @on snapshot/default/contentUpdated
          */
-        socket.on('snapshot/default/contentUpdated', function(data) {
+        socket.on('snapshot/default/contentUpdated', function(models, stats) {
 
             $scope.$apply(function() {
-                $scope.collection   = data.models;
-                $scope.stats        = data.stats;
-                $scope.debug        = data.debug;
+                $scope.collection   = models;
+                $scope.stats        = stats;
             });
 
         });
@@ -53,7 +46,7 @@
          * @return {void}
          */
         $scope.nextPage = function nextPage() {
-            var nextPageNumber = $scope.stats.pages.current += 1;
+            var nextPageNumber = $scope.stats.pages.current + 1;
             socket.emit('snapshot/default/pageNumber', nextPageNumber);
         };
 
@@ -62,7 +55,7 @@
          * @return {void}
          */
         $scope.previousPage = function previousPage() {
-            var previousPageNumber = $scope.stats.pages.current -= 1;
+            var previousPageNumber = $scope.stats.pages.current - 1;
             socket.emit('snapshot/default/pageNumber', previousPageNumber);
         };
 

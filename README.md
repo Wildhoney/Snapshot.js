@@ -51,7 +51,7 @@ As Snapshot supports multiple instances, a namespace is used to distinguish the 
 
 <small>(`:namespace` is the name you provided upon instantiation of `Snapshot` &ndash; if you didn't, then it's `default`.)</small>
 
-When the collection has been updated, Snapshot emits the `snapshot/:namespace/contentUpdated` event, passing through the snapshot as the first argument.
+When the collection has been updated, Snapshot emits the `snapshot/:namespace/contentUpdated` event, passing through the snapshot as the first argument, and statistics relating to the request as the second argument.
 
 For sorting by any given column, you can emit the `snapshot/:namespace/sortBy` event passing in the `key` and `direction` (ascending/descending). If you omit the `direction` property (or set its value to `false`) then Snapshot will cleverly invert the current sorting direction for you.
 
@@ -158,9 +158,9 @@ Since unique models will <strong>only</strong> ever be transmitted once, it's im
 Delta models are nothing more than the primary key of the model, which will help you lookup the model from your own collection cache. Therefore to detect a delta model, simply use something like `Number.isFinite` (or Underscore's `_.isNumber`) on the returned collection.
 
 ```javascript
-socket.on('snapshot/:namespace/contentUpdated', function(data) {
+socket.on('snapshot/:namespace/contentUpdated', function(models, stats) {
 
-    _.forEach(data.models, function(model) {
+    _.forEach(models, function(model) {
 
         if (_.isNumber(model)) {
             // Delta model!

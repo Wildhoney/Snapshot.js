@@ -42,11 +42,13 @@ describe('Snapshot.js', function() {
 
         it('Should set the page number, per page, and sort attributes', function() {
 
-            $snapshot.setPerPage(10);
-            $snapshot.perPage.should.equal(10);
+            $snapshot.setPerPage(2);
+            $snapshot.perPage.should.equal(2);
 
-            $snapshot.setPageNumber(5);
-            $snapshot.pageNumber.should.equal(5);
+            $snapshot.lastPageNumber = 3;
+            var hasChanged = $snapshot.setPageNumber(3);
+            $snapshot.pageNumber.should.equal(3);
+            hasChanged.should.equal(true);
 
             $snapshot.setSortBy('name', false);
             $snapshot.sorting.key.should.equal('name');
@@ -58,13 +60,22 @@ describe('Snapshot.js', function() {
 
         });
 
+        it('Should not set the page number when it is out of range', function() {
+
+            $snapshot.lastPageNumber = 2;
+            var hasChanged = $snapshot.setPageNumber(3);
+            $snapshot.pageNumber.should.equal(1);
+            hasChanged.should.equal(false);
+
+        });
+
         it('Should filter the collection by the name', function() {
 
             $snapshot.applyFilter('name', function(dimension) {
 
-                var socketMock = { on: function() {}, emit: function(name, data) {
-                    data.models.should.be.an.instanceOf(Object).with.lengthOf(1);
-                    data.models[0].name.should.equal('Adam');
+                var socketMock = { on: function() {}, emit: function(name, models) {
+                    models.should.be.an.instanceOf(Object).with.lengthOf(1);
+                    models[0].name.should.equal('Adam');
                 }};
 
                 dimension.filterExact('Adam');
@@ -72,9 +83,9 @@ describe('Snapshot.js', function() {
 
             });
 
-            var socketMock = { on: function() {}, emit: function(name, data) {
-                data.models.should.be.an.instanceOf(Object).with.lengthOf(6);
-                data.models[3].name.should.equal('Karl');
+            var socketMock = { on: function() {}, emit: function(name, models) {
+                models.should.be.an.instanceOf(Object).with.lengthOf(6);
+                models[3].name.should.equal('Karl');
             }};
 
             $snapshot.bootstrap(socketMock);
@@ -126,34 +137,34 @@ describe('Snapshot.js', function() {
 
                 it('Should change the models per page on event', function() {
                     $client.emit('snapshot/default/perPage', 3);
-                    $client.on('snapshot/default/contentUpdated', function(data) {
+                    $client.on('snapshot/default/contentUpdated', function(models) {
                         $snapshot.perPage.should.equal(3);
-                        data.models.should.have.lengthOf(3);
+                        models.should.have.lengthOf(3);
                     });
                 });
 
                 it('Should change the page number on event', function() {
                     $client.emit('snapshot/default/pageNumber', 1);
-                    $client.on('snapshot/default/contentUpdated', function(data) {
+                    $client.on('snapshot/default/contentUpdated', function(models) {
                         $snapshot.pageNumber.should.equal(1);
-                        data.models.should.have.lengthOf(6);
+                        models.should.have.lengthOf(6);
                     });
                 });
 
                 it('Should change the sorting order on event', function() {
                     $client.emit('snapshot/default/sortBy', 'name', 'descending');
-                    $client.on('snapshot/default/contentUpdated', function(data) {
-                        data.models.should.have.lengthOf(6);
-                        data.models[0].name.should.equal('Simon');
+                    $client.on('snapshot/default/contentUpdated', function(models) {
+                        models.should.have.lengthOf(6);
+                        models[0].name.should.equal('Simon');
                     });
                 });
 
                 it('Should store the IDs for those already sent', function() {
                     $snapshot.memory['1'] = 1;
-                    $client.on('snapshot/default/contentUpdated', function(data) {
+                    $client.on('snapshot/default/contentUpdated', function(models) {
                         $snapshot.memory.should.be.instanceOf(Object);
                         $snapshot.memory.should.have.property('3');
-                        data.models[0].should.equal('1');
+                        models[0].should.equal('1');
                     });
                 });
 
@@ -162,10 +173,10 @@ describe('Snapshot.js', function() {
                     $snapshot.delta.should.equal(true);
 
                     $client.emit('snapshot/default/pageNumber', 1);
-                    $client.on('snapshot/default/contentUpdated', function(data) {
+                    $client.on('snapshot/default/contentUpdated', function(models) {
                         $snapshot.memory.should.be.instanceOf(Object);
                         $snapshot.memory.should.have.property('3');
-                        data.models[0].name.should.equal('Adam');
+                        models[0].name.should.equal('Adam');
                     });
                 });
 
@@ -175,30 +186,30 @@ describe('Snapshot.js', function() {
 
                 it('Should filter the collection by name exactly', function() {
                     $client.emit('snapshot/default/exactFilter', 'name', 'Adam');
-                    $client.on('snapshot/default/contentUpdated', function(data) {
-                        data.models.should.have.lengthOf(1);
-                        data.models[0].name.should.equal('Adam');
+                    $client.on('snapshot/default/contentUpdated', function(models) {
+                        models.should.have.lengthOf(1);
+                        models[0].name.should.equal('Adam');
                     });
                 });
 
                 it('Should filter the collection by name fuzzily', function() {
                     $client.emit('snapshot/default/fuzzyFilter', 'name', 'A');
-                    $client.on('snapshot/default/contentUpdated', function(data) {
-                        data.models.should.have.lengthOf(5);
-                        data.models[0].name.should.equal('Adam');
-                        data.models[1].name.should.equal('Artem');
-                        data.models[2].name.should.equal('Brian');
-                        data.models[3].name.should.equal('Karl');
-                        data.models[4].name.should.equal('Masha');
+                    $client.on('snapshot/default/contentUpdated', function(models) {
+                        models.should.have.lengthOf(5);
+                        models[0].name.should.equal('Adam');
+                        models[1].name.should.equal('Artem');
+                        models[2].name.should.equal('Brian');
+                        models[3].name.should.equal('Karl');
+                        models[4].name.should.equal('Masha');
                     });
                 });
 
                 it('Should filter the collection by ID range', function() {
                     $client.emit('snapshot/default/rangeFilter', 'id', [2,4]);
-                    $client.on('snapshot/default/contentUpdated', function(data) {
-                        data.models.should.have.lengthOf(2);
-                        data.models[0].id.should.equal(3);
-                        data.models[1].id.should.equal(2);
+                    $client.on('snapshot/default/contentUpdated', function(models) {
+                        models.should.have.lengthOf(2);
+                        models[0].id.should.equal(3);
+                        models[1].id.should.equal(2);
                     });
                 });
 
