@@ -15,7 +15,7 @@ io.sockets.on('connection', function (socket) {
     $snapshot.setPageNumber(1);
     $snapshot.setSortBy('word', 'ascending');
 
-    fs.readFile('./words.json', 'utf8', function(err, data) {
+    fs.readFile('words.json', 'utf8', function(error, data) {
 
         // When the request is successful, pass the collection to Snapshot's `setCollection`
         // after parsing the JSON document.
