@@ -24,9 +24,9 @@
         <h3 class="ui header">
             Pagination (Page {{stats.pages.current}} of {{stats.pages.total | number: 0}}):
             <div class="ui breadcrumb sub header">
-                <a class="section" ng-click="previousPage()">Previous Page</a>
+                <a class="section previous-page" ng-click="previousPage()">Previous Page</a>
                 <div class="divider"> / </div>
-                <a class="section" ng-click="nextPage()">Next Page</a>
+                <a class="section next-page" ng-click="nextPage()">Next Page</a>
             </div>
         </h3>
 
@@ -65,8 +65,8 @@
         <table class="ui table sortable segment" ng-show="collection.length">
             <thead>
                 <tr>
-                    <th ng-click="sortBy('id')" style="width: 175px;">Primary Key</th>
-                    <th ng-click="sortBy('word')">Word</th>
+                    <th class="sort-by-id" ng-click="sortBy('id')" style="width: 175px;">Primary Key</th>
+                    <th class="sort-by-word" ng-click="sortBy('word')">Word</th>
                 </tr>
             </thead>
             <tbody>

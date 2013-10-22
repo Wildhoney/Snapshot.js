@@ -6,11 +6,7 @@ Given /^I have entered "([^"]*)" into the "([^"]*)" field$/ do |text, field|
   fill_in field, :with => text
 end
 
-When /^I click the "([^"]*)" button$/ do |button_text|
-  click_button button_text
-end
-
-When /^I click the "([^"]*)" element$/ do |selector|
+When /^I click the "([^"]*)" button$/ do |selector|
   find(selector).click
 end
 
