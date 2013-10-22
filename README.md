@@ -209,8 +209,8 @@ Grunt is a prerequisite to run the Mocha tests, which is installed when you run 
 Snapshot also comes bundled with a handful of Cucumber tests.
 
  * `cd tests/cucumber`
- * bundle install
- * bundle exec cucumber
+ * `bundle install`
+ * `bundle exec cucumber`
 
 Philosophy
 -----------
