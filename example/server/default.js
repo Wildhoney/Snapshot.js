@@ -31,6 +31,8 @@ io.sockets.on('connection', function (socket) {
      */
     socket.on('applyFilterByWord', function(text) {
 
+        console.log('Text is: ' + text);
+
         $snapshot.applyFilter('word', function(dimension) {
 
             dimension.filterFunction(function(d) {

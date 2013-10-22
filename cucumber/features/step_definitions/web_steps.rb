@@ -1,5 +1,5 @@
 Given /^I am on the home page$/ do
-  visit('/ncr')
+  visit('/')
 end
 
 Given /^I have entered "([^"]*)" into the "([^"]*)" field$/ do |text, field|
@@ -10,8 +10,14 @@ When /^I click the "([^"]*)" button$/ do |button_text|
   click_button button_text
 end
 
+When /^I click the "([^"]*)" element$/ do |selector|
+  find(selector).click
+end
+
 Then /^I should see "([^"]*)"$/ do |text|
   page.should have_content(text)
 end
 
-
+Given /^I wait for (\d+) seconds?$/ do |n|
+  sleep(n.to_i)
+end

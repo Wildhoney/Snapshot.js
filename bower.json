@@ -16,6 +16,7 @@
   "dependencies": {
     "socket.io-client": "~0.9.16",
     "angular": "~1.0.8",
-    "semantic-ui": "*"
+    "semantic-ui": "*",
+    "jquery": "~2.0.3"
   }
 }
