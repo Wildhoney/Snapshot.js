@@ -197,10 +197,20 @@ Below is a simple diagram of how Snapshot works. It demonstrates how the `snapsh
  * Node.js listens for the `customFilterApplied` event and then interacts with Snapshot;
  * Snapshot emits the `snapshot/:namespace/contentUpdated` event with the updated filter applied;
 
-Unit Testing
+Testing
 -----------
 
+<h3>Unit Testing</h3>
+
 Grunt is a prerequisite to run the Mocha tests, which is installed when you run `npm install`. Afterwards all of Snapshot's unit tests can be run with the `grunt test` command from the terminal.
+
+<h3>Cucumber</h3>
+
+Snapshot also comes bundled with a handful of Cucumber tests.
+
+ * `cd tests/cucumber`
+ * bundle install
+ * bundle exec cucumber
 
 Philosophy
 -----------
