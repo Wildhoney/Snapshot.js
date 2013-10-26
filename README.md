@@ -232,9 +232,7 @@ Since Snapshot uses Node.js, the browser support is that of Socket.io, which ess
  * Browser sorts the models by their colour;
  * Snapshot emits `snapshot/default/contentUpdated` to supply second page's red models ordered globally by colour;
 
-Angular
+Caching
 -----------
 
-<img src="https://lh6.googleusercontent.com/-DtPuPzooNEY/AAAAAAAAAAI/AAAAAAAAAC4/6Y1jxzshd4g/photo.jpg?sz=48" alt="Angular.js" />
-
-Snapshot also comes with a bundled Angular module for easier interaction. Simply add `$snapshot` as a dependency and you have everything you need.
+You may wish to cache the collection loaded into Snapshot &ndash; for this we recommend something like <a href="https://github.com/Wildhoney/RedisCache" target="_blank">RedisCache</a>.
