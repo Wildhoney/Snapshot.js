@@ -419,11 +419,24 @@
          * @method applyFilter
          * @param key {String}
          * @param filterMethod {Function}
+         * @param filterType {String}
          * @emit snapshot/:namespace/contentUpdated
          * Responsible for applying a filter on any given dimension by its key name.
          * @return {void}
          */
-        applyFilter: function applyFilter(key, filterMethod) {
+        applyFilter: function applyFilter(key, filterMethod, filterType) {
+
+            // Set a default for the `filterType` if one hasn't been specified.
+            filterType = filterType || 'default';
+            var supportedTypes = ['default', 'reduce'];
+
+            if (!_.contains(supportedTypes, filterType)) {
+
+                // Determine if the current filtering type is supported.
+                this._printMessage('Unsupported filter method: ' + filterType + '. Defaulting to "default"', 'negative');
+                filterType = 'default';
+
+            }
 
             var dimension = this.dimensions[key];
 
@@ -432,7 +445,11 @@
                 return;
             }
 
-            dimension.filterAll();
+            if (filterType === 'default') {
+                // Clear the current filter if we've set "default".
+                dimension.filterAll();
+            }
+
             filterMethod.call(this, dimension);
             this._emitContentUpdated();
 

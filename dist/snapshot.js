@@ -419,24 +419,12 @@
          * @method applyFilter
          * @param key {String}
          * @param filterMethod {Function}
+         * @param filterType {String}
          * @emit snapshot/:namespace/contentUpdated
          * Responsible for applying a filter on any given dimension by its key name.
          * @return {void}
          */
-        applyFilter: function applyFilter(key, filterMethod) {
 
-            var dimension = this.dimensions[key];
-
-            if (!dimension) {
-                this._printMessage('negative', 'Invalid column name found: "' + key + '".');
-                return;
-            }
-
-            dimension.filterAll();
-            filterMethod.call(this, dimension);
-            this._emitContentUpdated();
-
-        },
 
         /**
          * @method clearFilter

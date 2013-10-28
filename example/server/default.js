@@ -41,7 +41,7 @@ io.sockets.on('connection', function (socket) {
                 return d.match(regExp);
             });
 
-        });
+        }, 'reduce');
 
     });
 

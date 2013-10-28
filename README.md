@@ -113,6 +113,17 @@ socket.emit('snapshot/default/fuzzyFilter', 'word', 'abc');
 
 Each in-built filter expects the event name (`snapshot/default/fuzzyFilter`), the key (`word`), and value (`abc`).
 
+<h3>Filtering Types</h3>
+
+By default when you apply a filter, the previous filter will be cleared which is mostly likely the behaviour you're looking for. However, what if the user clicks **red**, and then clicks **blue**? Wouldn't it be nice if we could filter by both **red** and **blue**? In that case you're looking for the third argument of the `applyFilter` method.
+
+```javascript
+$snapshot.applyFilter('word', ..., 'reduce');
+```
+
+ * `default` &ndash; filtering cleared before each filter;
+ * `reduce` &ndash; filtering applied on current collection;
+
 Ranges
 -----------
 
