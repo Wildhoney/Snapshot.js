@@ -34,6 +34,8 @@
          */
         socket.on('snapshot/default/contentUpdated', function(models, stats) {
 
+            console.log(stats);
+
             $scope.$apply(function() {
                 $scope.collection   = models;
                 $scope.stats        = stats;

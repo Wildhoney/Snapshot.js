@@ -113,6 +113,21 @@ socket.emit('snapshot/default/fuzzyFilter', 'word', 'abc');
 
 Each in-built filter expects the event name (`snapshot/default/fuzzyFilter`), the key (`word`), and value (`abc`).
 
+Ranges
+-----------
+
+Since the browser does not download every model into the browser, it's impossible to determine what the minimum/maximum for any given key is without loading all models. Snapshot therefore allows you to specify which columns you wish to generate minimum/maximum ranges for.
+
+Please be careful with these as too many may noticeably slow down your Snapshots.
+
+The following would specify that you wish to retrieve the ranges for the `id` property on every content change.
+
+```javascript
+$snapshot.setRanges(['id']);
+```
+
+When the content changes you can access the range with `stats.ranges.id.min` and `stats.ranges.id.max`.
+
 Multiple Instances
 -----------
 

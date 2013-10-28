@@ -65,7 +65,10 @@
         <table class="ui table sortable segment" ng-show="collection.length">
             <thead>
                 <tr>
-                    <th class="sort-by-id" ng-click="sortBy('id')" style="width: 175px;">Primary Key</th>
+                    <th class="sort-by-id" ng-click="sortBy('id')" style="width: 175px;">
+                        Primary Key
+                        ({{stats.ranges.id.min}}&ndash;{{stats.ranges.id.max}})
+                    </th>
                     <th class="sort-by-word" ng-click="sortBy('word')">Word</th>
                 </tr>
             </thead>

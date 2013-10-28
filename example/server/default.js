@@ -14,6 +14,7 @@ io.sockets.on('connection', function (socket) {
     $snapshot.setPerPage(10);
     $snapshot.setPageNumber(1);
     $snapshot.setSortBy('word', 'ascending');
+    $snapshot.setRanges(['id']);
 
     fs.readFile('words.json', 'utf8', function(error, data) {
 
