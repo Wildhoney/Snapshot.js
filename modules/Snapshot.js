@@ -280,8 +280,9 @@
             var start       = new Date().getTime(),
                 content     = this.dimensions[this.sorting.key || this.primaryKey][sortingMethod](Infinity),
                 totalModels = content.length,
-                pageCount   = (totalModels / this.perPage < 0) ?
-                              0 : Math.ceil(totalModels / this.perPage),
+                count       = (totalModels / this.perPage),
+                pageCount   = (count < 0) || !count ?
+                              1 : Math.ceil(totalModels / this.perPage),
                 totalPages  = Number.isFinite(pageCount) ? pageCount : 1;
 
             // Update `lastPageNumber` so that we can detect if any changes to `pageNumber` would
@@ -533,11 +534,15 @@
                     return;
                 }
 
+                var min = dimension.top(1)[0],
+                    max = dimension.bottom(1)[0];
+
+                if (!min || !max) {
+                    return;
+                }
+
                 // Push the current bottom/top range into the array.
-                ranges[key] = {
-                    min: dimension.bottom(1)[0][key],
-                    max: dimension.top(1)[0][key]
-                };
+                ranges[key] = { min: min[key], max: max[key] };
 
             }.bind(this));
 
