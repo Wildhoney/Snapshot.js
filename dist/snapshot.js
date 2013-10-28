@@ -96,6 +96,12 @@
         pageNumber: 1,
 
         /**
+         * @property ranges
+         * @type {Array}
+         */
+        ranges: [],
+
+        /**
          * @property sorting
          * @type {Object}
          */
@@ -235,6 +241,22 @@
         },
 
         /**
+         * @method setRanges
+         * @param keys {Array}
+         * Responsible for defining for which keys the ranges (min -> max) must be supplied.
+         * @return {void}
+         */
+        setRanges: function setRanges(keys) {
+
+            if (!_.isArray(keys)) {
+                keys = [keys];
+            }
+
+            this.ranges = keys;
+
+        },
+
+        /**
          * @method _emitContentUpdated
          * @emit snapshot/:namespace/contentUpdated
          * Responsible for generating the content and firing the event to notify
@@ -312,7 +334,6 @@
             // Emits the event, passing the collection of models, and the time the
             // operation took to complete.
             this.socket.emit(['snapshot', this.namespace, 'contentUpdated'].join('/'), content, {
-                responseTime: (new Date().getTime() - start),
                 pages: {
                     total       : totalPages,
                     current     : this.pageNumber,
@@ -325,7 +346,9 @@
                 sort: {
                     key         : this.sorting.key,
                     direction   : this.sorting.direction
-                }
+                },
+                ranges          : this._getRanges(),
+                responseTime    : (new Date().getTime() - start)
             });
 
         },
@@ -468,6 +491,40 @@
             }
 
             console.log(title + 'Snapshot.js - '.bold.grey + message.white);
+
+        },
+
+        /**
+         * @method _getRanges
+         * Retrieve the ranges for any items that need their min/max.
+         * @return {Array}
+         * @private
+         */
+        _getRanges: function _getRanges() {
+
+            if (!this.ranges) {
+                return [];
+            }
+
+            var ranges = {};
+
+            _.forEach(this.ranges, function(key) {
+
+                var dimension = this.dimensions[key];
+
+                if (!dimension) {
+                    return;
+                }
+
+                // Push the current bottom/top range into the array.
+                ranges[key] = {
+                    min: dimension.bottom(1)[0][key],
+                    max: dimension.top(1)[0][key]
+                };
+
+            }.bind(this));
+
+            return ranges;
 
         }
 

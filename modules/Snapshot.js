@@ -347,7 +347,7 @@
                     key         : this.sorting.key,
                     direction   : this.sorting.direction
                 },
-                ranges          : this.ranges ? this._getRanges() : [],
+                ranges          : this._getRanges(),
                 responseTime    : (new Date().getTime() - start)
             });
 
@@ -501,6 +501,10 @@
          * @private
          */
         _getRanges: function _getRanges() {
+
+            if (!this.ranges) {
+                return [];
+            }
 
             var ranges = {};
 
