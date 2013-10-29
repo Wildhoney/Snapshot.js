@@ -430,7 +430,7 @@
             if (!_.contains(supportedTypes, filterType)) {
 
                 // Determine if the current filtering type is supported.
-                this._printMessage('Unsupported filter method: ' + filterType + '. Defaulting to "default"', 'negative');
+                this._printMessage('negative', 'Unsupported filter method: ' + filterType + '. Defaulting to "default"');
                 filterType = 'default';
 
             }
