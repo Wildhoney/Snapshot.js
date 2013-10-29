@@ -205,7 +205,7 @@
          * @return {Snapshot}
          */
         useDelta: function useDelta(status) {
-            this.delta = status;
+            this.delta = !!status;
             return this;
         },
 
@@ -261,6 +261,7 @@
          * @emit snapshot/:namespace/contentUpdated
          * Responsible for generating the content and firing the event to notify
          * the client of the current collection of models.
+         * @return {void}
          * @private
          */
         _emitContentUpdated: function _emitContentUpdated() {
