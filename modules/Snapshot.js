@@ -279,16 +279,10 @@
 
             var start       = new Date().getTime(),
                 content     = this.dimensions[this.sorting.key || this.primaryKey][sortingMethod](Infinity),
-                totalModels = content.length,
-                count       = (totalModels / this.perPage),
-                pageCount   = (count < 0) || !count ?
-                              1 : Math.ceil(totalModels / this.perPage),
-                totalPages  = Number.isFinite(pageCount) ? pageCount : 1;
+                modelCount  = content.length,
+                pageCount   = this.lastPageNumber = Math.ceil((modelCount / this.perPage)) || 1;
 
-            // Update `lastPageNumber` so that we can detect if any changes to `pageNumber` would
-            // place the content out of range.
-            this.lastPageNumber = totalPages;
-
+            // Only slice up the content if we're not displaying everything on one page.
             if (this.perPage !== 0) {
 
                 // Slice up the content according to the `pageNumber` and `perPage`.
@@ -326,8 +320,10 @@
 
             }
 
-            if (this.pageNumber > totalPages) {
-                this.setPageNumber(totalPages);
+            if (this.pageNumber > pageCount) {
+                // Invoke own method if the page number is more than the total amount of page, setting the
+                // actual page number to the total pages.
+                this.setPageNumber(pageCount);
                 this._emitContentUpdated();
                 return;
             }
@@ -336,12 +332,12 @@
             // operation took to complete.
             this.socket.emit(['snapshot', this.namespace, 'contentUpdated'].join('/'), content, {
                 pages: {
-                    total       : totalPages,
+                    total       : pageCount,
                     current     : this.pageNumber,
                     perPage     : this.perPage || content.length
                 },
                 models: {
-                    total       : totalModels,
+                    total       : modelCount,
                     current     : content.length
                 },
                 sort: {
@@ -534,8 +530,8 @@
                     return;
                 }
 
-                var min = dimension.top(1)[0],
-                    max = dimension.bottom(1)[0];
+                var min = dimension.bottom(1)[0],
+                    max = dimension.top(1)[0];
 
                 if (!min || !max) {
                     return;
