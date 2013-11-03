@@ -322,7 +322,7 @@
             }
 
             if (this.pageNumber > pageCount) {
-                // Invoke own method if the page number is more than the total amount of page, setting the
+                // Invoke own method if the page number is more than the total amount of pages, setting the
                 // actual page number to the total pages.
                 this.setPageNumber(pageCount);
                 this._emitContentUpdated();
@@ -425,14 +425,14 @@
         applyFilter: function applyFilter(key, filterMethod, filterType) {
 
             // Set a default for the `filterType` if one hasn't been specified.
-            filterType = filterType || 'default';
-            var supportedTypes = ['default', 'reduce'];
+            filterType = filterType || 'afresh';
+            var supportedTypes = ['afresh', 'reduce'];
 
             if (!_.contains(supportedTypes, filterType)) {
 
                 // Determine if the current filtering type is supported.
                 this._printMessage('negative', 'Unsupported filter method: ' + filterType + '. Defaulting to "default"');
-                filterType = 'default';
+                filterType = 'afresh';
 
             }
 
@@ -443,7 +443,7 @@
                 return;
             }
 
-            if (filterType === 'default') {
+            if (filterType === 'afresh') {
                 // Clear the current filter if we've set "default".
                 dimension.filterAll();
             }
