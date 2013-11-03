@@ -121,7 +121,7 @@ By default when you apply a filter, the previous filter will be cleared which is
 $snapshot.applyFilter('word', ..., 'reduce');
 ```
 
- * `default` &ndash; filtering cleared before each filter;
+ * `afresh` &ndash; filtering cleared before each filter;
  * `reduce` &ndash; filtering applied on current collection;
 
 Ranges
