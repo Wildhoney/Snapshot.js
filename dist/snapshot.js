@@ -36,7 +36,7 @@
          * @property namespace
          * @type {String}
          */
-        namespace: '',
+        namespace: null,
 
         /**
          * @property crossfilter
