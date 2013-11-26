@@ -14,7 +14,7 @@
     var Snapshot = function(namespace) {
 
         // Configure the namespace, with the default being "default".
-        this.namespace      = namespace || 'default';
+        this.namespace      = 'default';
 
         // Reset items for each instantiation.
         this.crossfilter    = null;
