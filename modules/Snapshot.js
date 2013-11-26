@@ -181,6 +181,26 @@
             }.bind(this));
 
             /**
+             * @on snapshot/:namespace/regExpFilter
+             */
+            socket.on(['snapshot', this.namespace, 'regExpFilter'].join('/'), function (key, regExp, flags) {
+
+                var expression = ['/', regExp, '/'].join('');
+
+                this.applyFilter(key, function(dimension) {
+
+                    var regExp = new RegExp(expression, flags);
+                    dimension.filterFunction(function(d) {
+                        return d.match(regExp);
+                    });
+
+                });
+
+                this._emitContentUpdated();
+
+            }.bind(this));
+
+            /**
              * @on snapshot/:namespace/rangeFilter
              */
             socket.on(['snapshot', this.namespace, 'rangeFilter'].join('/'), function (key, range) {
