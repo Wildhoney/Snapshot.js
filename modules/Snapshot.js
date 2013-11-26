@@ -4,7 +4,7 @@
 
     var crossfilter = require('crossfilter'),
         _           = require('underscore');
-                      require('colors');
+    require('colors');
 
     /**
      * @module Snapshot
@@ -36,7 +36,7 @@
          * @property namespace
          * @type {String}
          */
-        namespace: '',
+        namespace: null,
 
         /**
          * @property crossfilter
@@ -181,6 +181,26 @@
             }.bind(this));
 
             /**
+             * @on snapshot/:namespace/regExpFilter
+             */
+            socket.on(['snapshot', this.namespace, 'regExpFilter'].join('/'), function (key, regExp, flags) {
+
+                var expression = ['/', regExp, '/'].join('');
+
+                this.applyFilter(key, function(dimension) {
+
+                    var regExp = new RegExp(expression, flags);
+                    dimension.filterFunction(function(d) {
+                        return d.match(regExp);
+                    });
+
+                });
+
+                this._emitContentUpdated();
+
+            }.bind(this));
+
+            /**
              * @on snapshot/:namespace/rangeFilter
              */
             socket.on(['snapshot', this.namespace, 'rangeFilter'].join('/'), function (key, range) {
@@ -222,7 +242,7 @@
             var keys            = _.keys(collection[0]);
             this.primaryKey     = (primaryKey || keys[0]);
 
-                _.forEach(keys, function(key) {
+            _.forEach(keys, function(key) {
 
                 // Iterate over each key found in the first model, and create a
                 // dimension for it.
