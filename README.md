@@ -106,7 +106,7 @@ In light of Crossfilter's learning curve, Snapshot comes bundled with a handful 
  * `snapshot/:namespace/fuzzyFilter` `{String}`
  * `snapshot/:namespace/exactFilter` `{String}`
  * `snapshot/:namespace/rangeFilter` `{Array}`
- * `snapshot/:namespace/regexpFilter` `{String}` `{String}`
+ * `snapshot/:namespace/regExpFilter` `{String}` `{String}`
 
 ```javascript
 socket.emit('snapshot/default/fuzzyFilter', 'word', 'abc');
