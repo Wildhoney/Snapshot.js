@@ -99,6 +99,30 @@ You can also clear every single filter by using the `clearFilters` method.
 $snapshot.clearFilters();
 ```
 
+<h3>Composite Filters</h3>
+
+Before the release of 0.2.7 you could only apply filters one-at-a-time, which meant if you grouped filters together then the `contentUpdated` event would be emitted for each filter.
+
+However, 0.2.7 introduced the concept of composite filters, which are nothing more than groups of filters which can be applied together, and have the event emitted once all filters have been applied. In order to create a composite filter, simply pass in an array of properties to filter on to the `applyFilter` method &ndash; the callback in the second argument will be the dimension of each property.
+
+```javascript
+$snapshot.applyFilter(['latitude', 'longitude'], function(latitudeDimension, longitudeDimension) {
+
+    // Filter to ensure the latitude is above 50, and longitude above 0.
+
+    latitudeDimension.filterFunction(function(d) {
+        return (d > 50);
+    });
+
+    longitudeDimension.filterFunction(function(d) {
+        return (d > 0);
+    });
+
+    // Event will now be fired to reflect the current collection state.
+
+}, 'reduce');
+```
+
 <h3>In-Built Filters</h3>
 
 In light of Crossfilter's learning curve, Snapshot comes bundled with a handful of in-built filters for common filtering techniques. These can all be invoked by emitting an event with a corresponding value.
