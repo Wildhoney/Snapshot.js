@@ -4,7 +4,6 @@
 
     var crossfilter = require('crossfilter'),
         _           = require('underscore');
-    require('colors');
 
     /**
      * @module Snapshot
