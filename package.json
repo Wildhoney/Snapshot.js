@@ -1,7 +1,7 @@
 {
   "name": "node-snapshot",
   "buildName": "snapshot",
-  "version": "0.2.3",
+  "version": "0.2.5",
   "description": "Node.js app for slicing and dicing paginated chunks of data with easy sorting and filtering.",
   "scripts": {
     "test": "grunt test"

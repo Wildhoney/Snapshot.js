@@ -68,6 +68,13 @@
         memory: {},
 
         /**
+         * @property modelCount
+         * @type {Number}
+         * @default 0
+         */
+        modelCount: 0,
+
+        /**
          * @property lastPageNumber
          * @type {Number}
          */
@@ -237,9 +244,10 @@
          */
         setCollection: function setCollection(collection, primaryKey, suppressEmit) {
 
-            this.crossfilter    = crossfilter(collection);
-            var keys            = _.keys(collection[0]);
-            this.primaryKey     = (primaryKey || keys[0]);
+            this.crossfilter  = crossfilter(collection);
+            this.modelCount   = collection.length;
+            var keys          = _.keys(collection[0]);
+            this.primaryKey   = (primaryKey || keys[0]);
 
             _.forEach(keys, function(key) {
 
@@ -304,6 +312,14 @@
 
             // Only slice up the content if we're not displaying everything on one page.
             if (this.perPage !== 0) {
+
+                if (!isFinite(this.perPage)) {
+
+                    // If the developer has chosen to set "Infinity" for the per page, then we'll limit
+                    // that to the collection's total length.
+                    this.perPage = this.modelCount;
+
+                }
 
                 // Slice up the content according to the `pageNumber` and `perPage`.
                 var pageNumber  = (this.pageNumber - 1);
