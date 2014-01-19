@@ -62,7 +62,7 @@ socket.emit('snapshot/:namespace/sortBy', property, 'descending');
 Filtering
 -----------
 
-In addition to sorting and limiting, Snapshot also allows for the filtering of the collection. For this you can use the `applyFilter` method. Unfortunately you will need to read <a href="https://github.com/square/crossfilter/wiki/API-Reference" target="_blank">Crossfilter's API Reference</a> before you begin filtering &ndash; or for simple filtering you can use Snapshot's <a href="#in-built-filters">primitive in-built filters</a>.
+In addition to sorting and limiting, Snapshot also allows for the filtering of the collection. For this you can use the `applyFilter` method. Unfortunately you will need to read <a href="https://github.com/square/crossfilter/wiki/API-Reference" target="_blank">Crossfilter's API Reference</a> before you begin filtering &ndash; or for simple filtering you can use Snapshot's <a href="#bundled-filters">primitive bundled filters</a>.
 
 ```javascript
 socket.emit('filterByWord', text);
@@ -123,9 +123,9 @@ $snapshot.applyFilter(['latitude', 'longitude'], function(latitudeDimension, lon
 }, 'reduce');
 ```
 
-<h3>In-Built Filters</h3>
+<h3>Bundled Filters</h3>
 
-In light of Crossfilter's learning curve, Snapshot comes bundled with a handful of in-built filters for common filtering techniques. These can all be invoked by emitting an event with a corresponding value.
+In light of Crossfilter's learning curve, Snapshot comes bundled with a handful of bundled filters for common filtering techniques. These can all be invoked by emitting an event with a corresponding value.
 
  * `snapshot/:namespace/fuzzyFilter` `{String}`
  * `snapshot/:namespace/exactFilter` `{String}`
@@ -137,7 +137,7 @@ socket.emit('snapshot/default/fuzzyFilter', 'word', 'abc');
 socket.emit('snapshot/default/regExpFilter', 'word', '[a-z0-9]+', 'ig');
 ```
 
-Each in-built filter expects the event name (`snapshot/default/fuzzyFilter`), the key (`word`), and value (`abc`).
+Each bundled filter expects the event name (`snapshot/default/fuzzyFilter`), the key (`word`), and value (`abc`).
 
 <h3>Filtering Types</h3>
 
