@@ -475,7 +475,7 @@
 
             // Convert the `key` into an array so that single filters can be dealt
             // with in the same way as composite filters.
-            key = (_.isArray(key) ? key : [key]);
+            key = (_.isArray(key)) ? key : [key];
 
 
             // Iterate over each key.
