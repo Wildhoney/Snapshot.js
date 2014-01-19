@@ -5,12 +5,12 @@ Node.js app for slicing and dicing paginated chunks of data with easy sorting an
 
 <img src="https://travis-ci.org/Wildhoney/Snapshot.js.png?branch=master" alt="Travis CI" />
 &nbsp;
-<img src="https://badge.fury.io/js/snapshot-js.png" alt="NPM Version" />
+<img src="https://badge.fury.io/js/snapshot.js.png" alt="NPM Version" />
 
 Installing via npm
 -----------
 
-Snapshot is added to the npm registry, and can therefore be downloaded with `npm install snapshot-js`.
+Snapshot is added to the npm registry, and can therefore be downloaded with `npm install snapshot.js`.
 
 Dependencies
 -----------
