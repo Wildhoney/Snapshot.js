@@ -479,7 +479,7 @@
 
 
             // Iterate over each key.
-            _.forEach(key, _.bind(function forEach(key, index) {
+            _.forEach(key, _.bind(function forEach(key) {
 
                 var dimension = this.dimensions[key];
 
