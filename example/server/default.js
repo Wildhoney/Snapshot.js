@@ -34,9 +34,9 @@ io.sockets.on('connection', function (socket) {
 
         console.log('Text is: ' + text);
 
-        $snapshot.applyFilter('word', function(dimension) {
+        $snapshot.applyFilter('word', function(wordDimension) {
 
-            dimension.filterFunction(function(d) {
+            wordDimension.filterFunction(function(d) {
                 var regExp = new RegExp(text, 'i');
                 return d.match(regExp);
             });

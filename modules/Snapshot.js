@@ -461,7 +461,9 @@
 
             // Set a default for the `filterType` if one hasn't been specified.
             filterType = filterType || 'afresh';
-            var supportedTypes = ['afresh', 'reduce'];
+
+            var supportedTypes  = ['afresh', 'reduce'],
+                dimensions      = [];
 
             if (!_.contains(supportedTypes, filterType)) {
 
@@ -471,19 +473,33 @@
 
             }
 
-            var dimension = this.dimensions[key];
+            // Convert the `key` into an array so that single filters can be dealt
+            // with in the same way as composite filters.
+            key = (_.isArray(key) ? key : [key]);
 
-            if (!dimension) {
-                this._printMessage('negative', 'Invalid column name found: "' + key + '".');
-                return;
-            }
 
-            if (filterType === 'afresh') {
-                // Clear the current filter if we've set "default".
-                dimension.filterAll();
-            }
+            // Iterate over each key.
+            _.forEach(key, _.bind(function forEach(key, index) {
 
-            filterMethod.call(this, dimension);
+                var dimension = this.dimensions[key];
+
+                if (!dimension) {
+                    this._printMessage('negative', 'Invalid column name found: "' + key + '".');
+                    return;
+                }
+
+                if (filterType === 'afresh') {
+
+                    // Clear the current filter if we've set "default".
+                    dimension.filterAll();
+
+                }
+
+                dimensions.push(dimension);
+
+            }, this));
+
+            filterMethod.apply(this, dimensions);
             this._emitContentUpdated();
 
         },
