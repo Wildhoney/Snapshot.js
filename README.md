@@ -99,6 +99,22 @@ You can also clear every single filter by using the `clearFilters` method.
 $snapshot.clearFilters();
 ```
 
+Sometimes you may wish to clear certain filters before applying other filters, in which case you should utilise the <a href="#composite-filters">composite filters</a> approach by passing through the dimensions you wish to clear as well. You can then invoke the `filterAll` method on the dimension(s) you wish to clear.
+
+```javascript
+$snapshot.applyFilter(['latitude', 'longitude'], function(latitudeDimension, longitudeDimension) {
+
+    // Clear the latitude dimension.
+    latitudeDimension.filterAll();
+
+    // But then apply the longitude dimension.
+    longitudeDimension.filterFunction(function(d) {
+        return (d > 0);
+    });
+
+}, 'reduce');
+```
+
 <h3>Composite Filters</h3>
 
 Before the release of 0.2.7 you could only apply filters one-at-a-time, which meant if you grouped filters together then the `contentUpdated` event would be emitted for each filter.
@@ -125,7 +141,7 @@ $snapshot.applyFilter(['latitude', 'longitude'], function(latitudeDimension, lon
 
 <h3>Bundled Filters</h3>
 
-In light of Crossfilter's learning curve, Snapshot comes bundled with a handful of bundled filters for common filtering techniques. These can all be invoked by emitting an event with a corresponding value.
+In light of Crossfilter's learning curve, Snapshot ships with a handful of bundled filters for common filtering techniques. These can all be invoked by emitting an event with a corresponding value.
 
  * `snapshot/:namespace/fuzzyFilter` `{String}`
  * `snapshot/:namespace/exactFilter` `{String}`
