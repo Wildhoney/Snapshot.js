@@ -268,125 +268,6 @@
         },
 
         /**
-         * @method setRanges
-         * @param keys {Array}
-         * Responsible for defining for which keys the ranges (min -> max) must be supplied.
-         * @return {void}
-         */
-        setRanges: function setRanges(keys) {
-
-            if (!_.isArray(keys)) {
-                keys = [keys];
-            }
-
-            this.ranges = keys;
-
-        },
-
-        /**
-         * @method _emitContentUpdated
-         * @emit snapshot/:namespace/contentUpdated
-         * Responsible for generating the content and firing the event to notify
-         * the client of the current collection of models.
-         * @return {void}
-         * @private
-         */
-        _emitContentUpdated: function _emitContentUpdated() {
-
-            if (!this.crossfilter) {
-                // Don't attempt to fetch the content if we haven't loaded the
-                // Crossfilter yet.
-                return;
-            }
-
-            // Determine whether to use `top` or `bottom` depending on direction.
-            var sortingMethod = 'top';
-            if (_.contains(['ascending', 'ascend', 'asc'], this.sorting.direction)) {
-                sortingMethod = 'bottom';
-            }
-
-            var start       = new Date().getTime(),
-                content     = this.dimensions[this.sorting.key || this.primaryKey][sortingMethod](Infinity),
-                modelCount  = content.length,
-                pageCount   = this.lastPageNumber = Math.ceil((modelCount / this.perPage)) || 1;
-
-            // Only slice up the content if we're not displaying everything on one page.
-            if (this.perPage !== 0) {
-
-                if (!isFinite(this.perPage)) {
-
-                    // If the developer has chosen to set "Infinity" for the per page, then we'll limit
-                    // that to the collection's total length.
-                    this.perPage = this.modelCount;
-
-                }
-
-                // Slice up the content according to the `pageNumber` and `perPage`.
-                var pageNumber  = (this.pageNumber - 1);
-                var offset      = (pageNumber * this.perPage);
-                content         = content.slice(offset, this.perPage + offset);
-
-            }
-
-            // Determine if Snapshot has been kindly requested to send delta updates to reduce
-            // the amount of bandwidth being transferred across the wire.
-            if (this.delta) {
-
-                // Pluck all of the primary keys from the current collection of models.
-                var ids = _.pluck(content, this.primaryKey);
-
-                // Iterate over each of the current collection of models, transforming them into
-                // their primary key if they've been sent already.
-                _.forEach(content, function(model, key) {
-
-                    var primaryKey = model[this.primaryKey];
-
-                    if (this.memory[primaryKey]) {
-                        // Replace the full model with just its primary key if it's already been
-                        // transferred to the client.
-                        content[key] = primaryKey;
-                    }
-
-                }.bind(this));
-
-                // Iterate over each of the plucked IDs, adding them to the memory object.
-                _.forEach(ids, function(id) {
-                    this.memory[id] = id;
-                }.bind(this));
-
-            }
-
-            if (this.pageNumber > pageCount) {
-                // Invoke own method if the page number is more than the total amount of pages, setting the
-                // actual page number to the total pages.
-                this.setPageNumber(pageCount);
-                this._emitContentUpdated();
-                return;
-            }
-
-            // Emits the event, passing the collection of models, and the time the
-            // operation took to complete.
-            this.socket.emit(['snapshot', this.namespace, 'contentUpdated'].join('/'), content, {
-                pages: {
-                    total       : pageCount,
-                    current     : this.pageNumber,
-                    perPage     : this.perPage || content.length
-                },
-                models: {
-                    total       : modelCount,
-                    current     : content.length
-                },
-                sort: {
-                    key         : this.sorting.key,
-                    direction   : this.sorting.direction
-                },
-                ranges          : this._getRanges(),
-                responseTime    : (new Date().getTime() - start)
-            });
-
-        },
-
-        /**
          * @method setPerPage
          * @emit snapshot/:namespace/contentUpdated
          * @param perPage {Number}
@@ -445,6 +326,22 @@
                 key         : key,
                 direction   : direction || invertDirection()
             };
+
+        },
+
+        /**
+         * @method setRanges
+         * @param keys {Array}
+         * Responsible for defining for which keys the ranges (min -> max) must be supplied.
+         * @return {void}
+         */
+        setRanges: function setRanges(keys) {
+
+            if (!_.isArray(keys)) {
+                keys = [keys];
+            }
+
+            this.ranges = keys;
 
         },
 
@@ -557,6 +454,109 @@
             }
 
             console.log(title + 'Snapshot.js - '.bold.grey + message.white);
+
+        },
+
+        /**
+         * @method _emitContentUpdated
+         * @emit snapshot/:namespace/contentUpdated
+         * Responsible for generating the content and firing the event to notify
+         * the client of the current collection of models.
+         * @return {void}
+         * @private
+         */
+        _emitContentUpdated: function _emitContentUpdated() {
+
+            if (!this.crossfilter) {
+                // Don't attempt to fetch the content if we haven't loaded the
+                // Crossfilter yet.
+                return;
+            }
+
+            // Determine whether to use `top` or `bottom` depending on direction.
+            var sortingMethod = 'top';
+            if (_.contains(['ascending', 'ascend', 'asc'], this.sorting.direction)) {
+                sortingMethod = 'bottom';
+            }
+
+            var start       = new Date().getTime(),
+                content     = this.dimensions[this.sorting.key || this.primaryKey][sortingMethod](Infinity),
+                modelCount  = content.length,
+                pageCount   = this.lastPageNumber = Math.ceil((modelCount / this.perPage)) || 1;
+
+            // Only slice up the content if we're not displaying everything on one page.
+            if (this.perPage !== 0) {
+
+                if (!isFinite(this.perPage)) {
+
+                    // If the developer has chosen to set "Infinity" for the per page, then we'll limit
+                    // that to the collection's total length.
+                    this.perPage = this.modelCount;
+
+                }
+
+                // Slice up the content according to the `pageNumber` and `perPage`.
+                var pageNumber  = (this.pageNumber - 1);
+                var offset      = (pageNumber * this.perPage);
+                content         = content.slice(offset, this.perPage + offset);
+
+            }
+
+            // Determine if Snapshot has been kindly requested to send delta updates to reduce
+            // the amount of bandwidth being transferred across the wire.
+            if (this.delta) {
+
+                // Pluck all of the primary keys from the current collection of models.
+                var ids = _.pluck(content, this.primaryKey);
+
+                // Iterate over each of the current collection of models, transforming them into
+                // their primary key if they've been sent already.
+                _.forEach(content, function(model, key) {
+
+                    var primaryKey = model[this.primaryKey];
+
+                    if (this.memory[primaryKey]) {
+                        // Replace the full model with just its primary key if it's already been
+                        // transferred to the client.
+                        content[key] = primaryKey;
+                    }
+
+                }.bind(this));
+
+                // Iterate over each of the plucked IDs, adding them to the memory object.
+                _.forEach(ids, function(id) {
+                    this.memory[id] = id;
+                }.bind(this));
+
+            }
+
+            if (this.pageNumber > pageCount) {
+                // Invoke own method if the page number is more than the total amount of pages, setting the
+                // actual page number to the total pages.
+                this.setPageNumber(pageCount);
+                this._emitContentUpdated();
+                return;
+            }
+
+            // Emits the event, passing the collection of models, and the time the
+            // operation took to complete.
+            this.socket.emit(['snapshot', this.namespace, 'contentUpdated'].join('/'), content, {
+                pages: {
+                    total       : pageCount,
+                    current     : this.pageNumber,
+                    perPage     : this.perPage || content.length
+                },
+                models: {
+                    total       : modelCount,
+                    current     : content.length
+                },
+                sort: {
+                    key         : this.sorting.key,
+                    direction   : this.sorting.direction
+                },
+                ranges          : this._getRanges(),
+                responseTime    : (new Date().getTime() - start)
+            });
 
         },
 
