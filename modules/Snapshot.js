@@ -2,8 +2,17 @@
 
     "use strict";
 
-    var crossfilter = require('crossfilter'),
-        _           = require('underscore');
+    try {
+
+        var crossfilter = require('crossfilter'),
+            _           = require('underscore');
+
+    } catch (e) {
+
+        // We couldn't load Crossfilter and/or Underscore.
+        console.error('Cannot load dependencies. Please ensure you ran `npm install`.');
+
+    }
 
     /**
      * @module Snapshot
