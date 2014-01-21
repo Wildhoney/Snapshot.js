@@ -349,7 +349,7 @@
          * @method applyFilter
          * @param key {String}
          * @param filterMethod {Function}
-         * @param filterType {String}
+         * @param [filterType="afresh"] {String}
          * @emit snapshot/:namespace/contentUpdated
          * Responsible for applying a filter on any given dimension by its key name.
          * @return {void}
