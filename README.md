@@ -221,6 +221,8 @@ Once you've enabled delta updates using `useDelta(true)` as part of the bootstra
 $snapshot.setCollection([{ id: 1 }, { id: 2 }, { id: 3 }], 'id');
 ```
 
+**Note:** You can suppress the initial event when invoking `setCollection` by passing `true` as the third argument.
+
 Since unique models will <strong>only</strong> ever be transmitted once, it's imperative that you keep a history of all models from the `snapshot/:namespace/contentUpdated` event, and then to utilise those from your local cache when you come across a delta model.
 
 Delta models are nothing more than the primary key of the model, which will help you lookup the model from your own collection cache. Therefore to detect a delta model, simply use something like `Number.isFinite` (or Underscore's `_.isNumber`) on the returned collection.
