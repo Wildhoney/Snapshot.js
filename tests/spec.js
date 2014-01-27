@@ -13,9 +13,14 @@ describe('Snapshot.js', function() {
 
             $snapshot = new Snapshot('default').bootstrap(socketMock).useDelta(false);
             $snapshot.setSortBy('name', 'ascending');
-            $snapshot.setCollection([ { id: 1, name: 'Adam' }, { id: 2, name: 'Masha' }, { id: 3, name: 'Karl' },
-                { id: 4, name: 'Brian' }, { id: 5, name: 'Simon' }, { id: 6, name: 'Artem' }],
-                'id', true);
+            $snapshot.setCollection([
+                { id: 1, name: 'Adam', countries: ['United Kingdom', 'Russian Federation'] },
+                { id: 2, name: 'Masha',countries: ['Russian Federation'] },
+                { id: 3, name: 'Karl', countries: ['United Kingdom'] },
+                { id: 4, name: 'Brian', countries: ['United Kingdom'] },
+                { id: 5, name: 'Simon', countries: ['United Kingdom'] },
+                { id: 6, name: 'Artem', countries: ['United Kingdom', 'Ukraine'] }
+            ], 'id', true);
 
         });
 
