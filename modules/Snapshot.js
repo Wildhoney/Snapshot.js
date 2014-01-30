@@ -135,6 +135,21 @@
             // Keep a reference to the socket for emitting purposes.
             this.socket = socket;
 
+            // For the internal garbage collection. Although it's recommended to nullify the instance
+            // of Snapshot on disconnect, too.
+            socket.on('disconnect', _.bind(function disconnect() {
+
+                for (var item in this) {
+
+                    // Nullify items that aren't functions and belong directly to this object.
+                    if (this.hasOwnProperty(item) && typeof this !== 'function') {
+                        this[item] = undefined;
+                    }
+
+                }
+
+            }, this));
+
             /**
              * @on snapshot/:namespace/perPage
              */
