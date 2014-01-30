@@ -1,6 +1,6 @@
 {
   "name": "snapshot.js",
-  "version": "0.2.9",
+  "version": "0.2.10",
   "description": "Node.js app for slicing and dicing ~100,000 models in <5ms with easy sorting, paginating, and filtering.",
   "homepage": "https://github.com/Wildhoney/Snapshot.js",
   "authors": [
