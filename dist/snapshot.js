@@ -187,6 +187,36 @@
             }.bind(this));
 
             /**
+             * @on snapshot/:namespace/inArrayFilter
+             */
+            socket.on(['snapshot', this.namespace, 'inArrayFilter'].join('/'), function (key, array) {
+
+                this.applyFilter(key, function(dimension) {
+                    dimension.filterFunction(function(d) {
+                        return _.contains(array, d);
+                    });
+                });
+
+                this._emitContentUpdated();
+
+            }.bind(this));
+
+            /**
+             * @on snapshot/:namespace/notInArrayFilter
+             */
+            socket.on(['snapshot', this.namespace, 'notInArrayFilter'].join('/'), function (key, array) {
+
+                this.applyFilter(key, function(dimension) {
+                    dimension.filterFunction(function(d) {
+                        return !_.contains(array, d);
+                    });
+                });
+
+                this._emitContentUpdated();
+
+            }.bind(this));
+
+            /**
              * @on snapshot/:namespace/exactFilter
              */
             socket.on(['snapshot', this.namespace, 'exactFilter'].join('/'), function (key, value) {
@@ -640,7 +670,8 @@
                     max = dimension.top(1)[0];
 
                 if (!min || !max) {
-                    return;
+                    ranges[key] = { min: -Infinity, max: Infinity };
+                    return
                 }
 
                 // Push the current bottom/top range into the array.
