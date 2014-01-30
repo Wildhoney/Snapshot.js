@@ -640,7 +640,8 @@
                     max = dimension.top(1)[0];
 
                 if (!min || !max) {
-                    return;
+                    ranges[key] = { min: -Infinity, max: Infinity };
+                    return
                 }
 
                 // Push the current bottom/top range into the array.
