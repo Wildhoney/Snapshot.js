@@ -14,12 +14,12 @@ describe('Snapshot.js', function() {
             $snapshot = new Snapshot('default').bootstrap(socketMock).useDelta(false);
             $snapshot.setSortBy('name', 'ascending');
             $snapshot.setCollection([
-                { id: 1, name: 'Adam', countries: ['United Kingdom', 'Russian Federation'] },
-                { id: 2, name: 'Masha',countries: ['Russian Federation'] },
-                { id: 3, name: 'Karl', countries: ['United Kingdom'] },
-                { id: 4, name: 'Brian', countries: ['United Kingdom'] },
-                { id: 5, name: 'Simon', countries: ['United Kingdom'] },
-                { id: 6, name: 'Artem', countries: ['United Kingdom', 'Ukraine'] }
+                { id: 1, name: 'Adam', country: 'United Kingdom' },
+                { id: 2, name: 'Masha',country: 'Russian Federation' },
+                { id: 3, name: 'Karl', country: 'United Kingdom' },
+                { id: 4, name: 'Brian', country: 'United Kingdom' },
+                { id: 5, name: 'Simon', country: 'United Kingdom' },
+                { id: 6, name: 'Artem', country: 'Ukraine' }
             ], 'id', true);
 
         });
@@ -111,9 +111,14 @@ describe('Snapshot.js', function() {
 
                 $snapshot = new Snapshot('default').bootstrap(socket).useDelta(false);
                 $snapshot.setSortBy('name', 'ascending');
-                $snapshot.setCollection([{ id: 1, name: 'Adam' }, { id: 2, name: 'Masha' }, { id: 3, name: 'Karl' },
-                    { id: 4, name: 'Brian' }, { id: 5, name: 'Simon' }, { id: 6, name: 'Artem' }],
-                    'id', true);
+                $snapshot.setCollection([
+                    { id: 1, name: 'Adam', country: 'United Kingdom' },
+                    { id: 2, name: 'Masha',country: 'Russian Federation' },
+                    { id: 3, name: 'Karl', country: 'United Kingdom' },
+                    { id: 4, name: 'Brian', country: 'United Kingdom' },
+                    { id: 5, name: 'Simon', country: 'United Kingdom' },
+                    { id: 6, name: 'Artem', country: 'Ukraine' }
+                ], 'id', true);
 
             });
 
@@ -194,6 +199,22 @@ describe('Snapshot.js', function() {
                     $client.on('snapshot/default/contentUpdated', function(models) {
                         models.should.have.lengthOf(1);
                         models[0].name.should.equal('Adam');
+                    });
+                });
+
+                it('Should filter the collection by values in array', function() {
+                    $client.emit('snapshot/default/inArrayFilter', 'country', ['Ukraine']);
+                    $client.on('snapshot/default/contentUpdated', function(models) {
+                        models.should.have.lengthOf(1);
+                        models[0].name.should.equal('Artem');
+                    });
+                });
+
+                it('Should filter the collection by values not in array', function() {
+                    $client.emit('snapshot/default/notInArrayFilter', 'country', ['United Kingdom']);
+                    $client.on('snapshot/default/contentUpdated', function(models) {
+                        models.should.have.lengthOf(2);
+                        models[0].name.should.equal('Artem');
                     });
                 });
 
