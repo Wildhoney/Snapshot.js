@@ -5,7 +5,7 @@ Node.js app for slicing and dicing paginated chunks of data with easy sorting an
 
 <img src="https://travis-ci.org/Wildhoney/Snapshot.js.png?branch=master" alt="Travis CI" />
 &nbsp;
-<img src="https://badge.fury.io/js/node-shapshot.png" alt="NPM Version" />
+<img src="https://badge.fury.io/js/node-snapshot.png" alt="NPM Version" />
 
 Installing via npm
 -----------
