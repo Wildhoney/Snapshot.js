@@ -71,6 +71,13 @@
         primaryKey: '',
 
         /**
+         * @property allowEmit
+         * @type {Boolean}
+         * @default true
+         */
+        allowEmit: true,
+
+        /**
          * @property memory
          * @type {Object}
          */
@@ -257,6 +264,29 @@
         useDelta: function useDelta(status) {
             this.delta = !!status;
             return this;
+        },
+
+        /**
+         * @method pauseEmit
+         * @return {void}
+         */
+        pauseEmit: function pauseEmit() {
+            this.allowEmit = false;
+        },
+
+        /**
+         * @method resumeEmit
+         * @param emitContentUpdatedEvent {Boolean}
+         * @return {void}
+         */
+        resumeEmit: function pauseEmit(emitContentUpdatedEvent) {
+
+            this.allowEmit = true;
+
+            if (emitContentUpdatedEvent) {
+                this._emitContentUpdated();
+            }
+
         },
 
         /**
@@ -491,7 +521,7 @@
          */
         _emitContentUpdated: function _emitContentUpdated() {
 
-            if (!this.crossfilter) {
+            if (!this.crossfilter || !this.allowEmit) {
                 // Don't attempt to fetch the content if we haven't loaded the
                 // Crossfilter yet.
                 return;
