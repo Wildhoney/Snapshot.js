@@ -149,7 +149,7 @@
                 for (var item in this) {
 
                     // Nullify items that aren't functions and belong directly to this object.
-                    if (this.hasOwnProperty(item) && typeof this !== 'function') {
+                    if (this.hasOwnProperty(item) && typeof this[item] !== 'function') {
                         this[item] = undefined;
                     }
 
