@@ -322,15 +322,16 @@
         /**
          * @method setCollection
          * @param collection {Array}
+         * @param keys {Array}
          * @param primaryKey {String}
          * @param suppressEmit {Boolean}
          * @return {void}
          */
-        setCollection: function setCollection(collection, primaryKey, suppressEmit) {
+        setCollection: function setCollection(collection, keys, primaryKey, suppressEmit) {
 
             this.crossfilter  = crossfilter(collection);
             this.modelCount   = collection.length;
-            var keys          = _.keys(collection[0]);
+            keys              = keys || _.keys(collection[0]);
             this.primaryKey   = (primaryKey || keys[0]);
 
             _.forEach(keys, function(key) {

@@ -21,7 +21,7 @@ io.sockets.on('connection', function (socket) {
         // When the request is successful, pass the collection to Snapshot's `setCollection`
         // after parsing the JSON document.
         var json = JSON.parse(data);
-        $snapshot.setCollection(json);
+        $snapshot.setCollection(json, ['id', 'word']);
 
     });
 
