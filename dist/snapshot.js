@@ -325,9 +325,10 @@
          * @param keys {Array}
          * @param primaryKey {String}
          * @param suppressEmit {Boolean}
+         * @param disableTicks {Boolean}
          * @return {void}
          */
-        setCollection: function setCollection(collection, keys, primaryKey, suppressEmit) {
+        setCollection: function setCollection(collection, keys, primaryKey, suppressEmit, disableTicks) {
 
             var time          = new Date().getTime();
             this.crossfilter  = crossfilter(collection);
@@ -337,18 +338,42 @@
 
             _.forEach(keys, function(key) {
 
-                // Iterate over each key found in the first model, and create a
-                // dimension for it.
-                this.dimensions[key] = this.crossfilter.dimension(function(model) {
-                    return model[key];
-                });
+                var createDimension = _.bind(function createDimension() {
+
+                    // Iterate over each key found in the first model, and create a
+                    // dimension for it.
+                    this.dimensions[key] = this.crossfilter.dimension(function(model) {
+                        return model[key];
+                    });
+
+                }, this);
+
+                if (disableTicks) {
+                    createDimension();
+                    return;
+                }
+
+                console.log('Tickls');
+                process.nextTick(createDimension);
 
             }.bind(this));
 
             if (!suppressEmit) {
+
+                var emit = _.bind(function emit() {
+                    this._emitContentUpdated(time);
+                }, this);
+
                 // Emit the `snapshot/:namespace/contentUpdated` event because we've loaded
                 // the collection into memory.
-                this._emitContentUpdated(time);
+
+                if (disableTicks) {
+                    emit();
+                    return;
+                }
+
+                process.nextTick(emit);
+
             }
 
         },
