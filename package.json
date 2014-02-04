@@ -1,7 +1,7 @@
 {
   "name": "node-snapshot",
   "buildName": "snapshot",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Node.js app for slicing and dicing ~100,000 models in <5ms with easy sorting, paginating, and filtering.",
   "scripts": {
     "test": "grunt test"
@@ -19,9 +19,6 @@
   "dependencies": {
     "crossfilter": "~1.3.5",
     "underscore": "~1.5.2",
-    "grunt-cli": "~0.1.9",
-    "bower": "~1.2.7",
-    "grunt": "~0.4.1",
     "grunt-contrib-uglify": "~0.2.4",
     "grunt-contrib-jshint": "~0.6.4",
     "socket.io": "~0.9.16",
