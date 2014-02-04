@@ -337,18 +337,26 @@
 
             _.forEach(keys, function(key) {
 
-                // Iterate over each key found in the first model, and create a
-                // dimension for it.
-                this.dimensions[key] = this.crossfilter.dimension(function(model) {
-                    return model[key];
-                });
+                process.nextTick(_.bind(function nextTick() {
+
+                    // Iterate over each key found in the first model, and create a
+                    // dimension for it.
+                    this.dimensions[key] = this.crossfilter.dimension(function(model) {
+                        return model[key];
+                    });
+
+                }, this));
 
             }.bind(this));
 
             if (!suppressEmit) {
+
                 // Emit the `snapshot/:namespace/contentUpdated` event because we've loaded
                 // the collection into memory.
-                this._emitContentUpdated(time);
+                process.nextTick(_.bind(function nextTick() {
+                    this._emitContentUpdated(time);
+                }, this));
+
             }
 
         },
