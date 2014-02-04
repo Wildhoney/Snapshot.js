@@ -325,9 +325,10 @@
          * @param keys {Array}
          * @param primaryKey {String}
          * @param suppressEmit {Boolean}
+         * @param disableTicks {Boolean}
          * @return {void}
          */
-        setCollection: function setCollection(collection, keys, primaryKey, suppressEmit) {
+        setCollection: function setCollection(collection, keys, primaryKey, suppressEmit, disableTicks) {
 
             var time          = new Date().getTime();
             this.crossfilter  = crossfilter(collection);
@@ -337,7 +338,7 @@
 
             _.forEach(keys, function(key) {
 
-                process.nextTick(_.bind(function nextTick() {
+                var createDimension = _.bind(function createDimension() {
 
                     // Iterate over each key found in the first model, and create a
                     // dimension for it.
@@ -345,17 +346,33 @@
                         return model[key];
                     });
 
-                }, this));
+                }, this);
+
+                if (disableTicks) {
+                    createDimension();
+                    return;
+                }
+
+                console.log('Tickls');
+                process.nextTick(createDimension);
 
             }.bind(this));
 
             if (!suppressEmit) {
 
+                var emit = _.bind(function emit() {
+                    this._emitContentUpdated(time);
+                }, this);
+
                 // Emit the `snapshot/:namespace/contentUpdated` event because we've loaded
                 // the collection into memory.
-                process.nextTick(_.bind(function nextTick() {
-                    this._emitContentUpdated(time);
-                }, this));
+
+                if (disableTicks) {
+                    emit();
+                    return;
+                }
+
+                process.nextTick(emit);
 
             }
 
