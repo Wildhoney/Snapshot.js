@@ -20,7 +20,7 @@ describe('Snapshot.js', function() {
                 { id: 4, name: 'Brian', country: 'United Kingdom' },
                 { id: 5, name: 'Simon', country: 'United Kingdom' },
                 { id: 6, name: 'Artem', country: 'Ukraine' }
-            ], 'id', true);
+            ], null, 'id', true);
 
         });
 
@@ -118,7 +118,7 @@ describe('Snapshot.js', function() {
                     { id: 4, name: 'Brian', country: 'United Kingdom' },
                     { id: 5, name: 'Simon', country: 'United Kingdom' },
                     { id: 6, name: 'Artem', country: 'Ukraine' }
-                ], 'id', true);
+                ], null, 'id', true);
 
             });
 
