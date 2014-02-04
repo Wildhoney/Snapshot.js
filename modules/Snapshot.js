@@ -329,6 +329,7 @@
          */
         setCollection: function setCollection(collection, keys, primaryKey, suppressEmit) {
 
+            var time          = new Date().getTime();
             this.crossfilter  = crossfilter(collection);
             this.modelCount   = collection.length;
             keys              = keys || _.keys(collection[0]);
@@ -347,7 +348,7 @@
             if (!suppressEmit) {
                 // Emit the `snapshot/:namespace/contentUpdated` event because we've loaded
                 // the collection into memory.
-                this._emitContentUpdated();
+                this._emitContentUpdated(time);
             }
 
         },
@@ -544,13 +545,14 @@
 
         /**
          * @method _emitContentUpdated
+         * @param time {Number}
          * @emit snapshot/:namespace/contentUpdated
          * Responsible for generating the content and firing the event to notify
          * the client of the current collection of models.
          * @return {void}
          * @private
          */
-        _emitContentUpdated: function _emitContentUpdated() {
+        _emitContentUpdated: function _emitContentUpdated(time) {
 
             if (!this.crossfilter || !this.allowEmit) {
                 // Don't attempt to fetch the content if we haven't loaded the
@@ -564,7 +566,7 @@
                 sortingMethod = 'bottom';
             }
 
-            var start       = new Date().getTime(),
+            var start       = time || new Date().getTime(),
                 content     = this.dimensions[this.sorting.key || this.primaryKey][sortingMethod](Infinity),
                 modelCount  = content.length,
                 pageCount   = this.lastPageNumber = Math.ceil((modelCount / this.perPage)) || 1;
