@@ -353,7 +353,6 @@
                     return;
                 }
 
-                console.log('Tickls');
                 process.nextTick(createDimension);
 
             }.bind(this));
@@ -361,11 +360,12 @@
             if (!suppressEmit) {
 
                 var emit = _.bind(function emit() {
-                    this._emitContentUpdated(time);
-                }, this);
 
-                // Emit the `snapshot/:namespace/contentUpdated` event because we've loaded
-                // the collection into memory.
+                    // Emit the `snapshot/:namespace/contentUpdated` event because we've loaded
+                    // the collection into memory.
+                    this._emitContentUpdated(time);
+
+                }, this);
 
                 if (disableTicks) {
                     emit();
