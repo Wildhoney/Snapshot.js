@@ -22,13 +22,13 @@
     var Snapshot = function(namespace) {
 
         // Configure the namespace, with the default being "default".
-        this.namespace      = namespace || 'default';
+        this.namespace = namespace || 'default';
 
         // Reset items for each instantiation.
-        this.crossfilter    = null;
-        this.dimensions     = {};
-        this.memory         = {};
-        this.socket         = { emit: function() {
+        this.crossfilter = null;
+        this.dimensions = {};
+        this.memory = {};
+        this.socket = { emit: function() {
             this._printMessage('negative', 'You have not attached the socket.');
         }.bind(this)};
 
@@ -97,11 +97,12 @@
         lastPageNumber: 1,
 
         /**
-         * @property delta
-         * @type {Boolean}
          * Whether or not to provide delta updates to the connected clients.
          * In enabling delta updates, more work is required on the frontend to memorise which
          * models were already sent.
+         *
+         * @property delta
+         * @type {Boolean}
          */
         delta: false,
 
@@ -128,8 +129,8 @@
          * @type {Object}
          */
         sorting: {
-            key         : '',
-            direction   : 'ascending'
+            key: '',
+            direction: 'ascending'
         },
 
         /**
@@ -158,7 +159,7 @@
             }, this));
 
             /**
-             * @on snapshot/:namespace/perPage
+             * @event snapshot/:namespace/perPage
              */
             socket.on(['snapshot', this.namespace, 'perPage'].join('/'), function (value) {
                 this.setPerPage(value);
@@ -166,7 +167,7 @@
             }.bind(this));
 
             /**
-             * @on snapshot/:namespace/pageNumber
+             * @event snapshot/:namespace/pageNumber
              */
             socket.on(['snapshot', this.namespace, 'pageNumber'].join('/'), function (value) {
 
@@ -179,7 +180,7 @@
             }.bind(this));
 
             /**
-             * @on snapshot/:namespace/sortBy
+             * @event snapshot/:namespace/sortBy
              */
             socket.on(['snapshot', this.namespace, 'sortBy'].join('/'), function (key, direction) {
                 this.setSortBy(key, direction);
@@ -187,7 +188,7 @@
             }.bind(this));
 
             /**
-             * @on snapshot/:namespace/inArrayFilter
+             * @event snapshot/:namespace/inArrayFilter
              */
             socket.on(['snapshot', this.namespace, 'inArrayFilter'].join('/'), function (key, array) {
 
@@ -202,7 +203,7 @@
             }.bind(this));
 
             /**
-             * @on snapshot/:namespace/notInArrayFilter
+             * @event snapshot/:namespace/notInArrayFilter
              */
             socket.on(['snapshot', this.namespace, 'notInArrayFilter'].join('/'), function (key, array) {
 
@@ -217,7 +218,7 @@
             }.bind(this));
 
             /**
-             * @on snapshot/:namespace/exactFilter
+             * @event snapshot/:namespace/exactFilter
              */
             socket.on(['snapshot', this.namespace, 'exactFilter'].join('/'), function (key, value) {
 
@@ -230,7 +231,7 @@
             }.bind(this));
 
             /**
-             * @on snapshot/:namespace/fuzzyFilter
+             * @event snapshot/:namespace/fuzzyFilter
              */
             socket.on(['snapshot', this.namespace, 'fuzzyFilter'].join('/'), function (key, value) {
 
@@ -248,7 +249,7 @@
             }.bind(this));
 
             /**
-             * @on snapshot/:namespace/regExpFilter
+             * @event snapshot/:namespace/regExpFilter
              */
             socket.on(['snapshot', this.namespace, 'regExpFilter'].join('/'), function (key, regExp, flags) {
 
@@ -268,7 +269,7 @@
             }.bind(this));
 
             /**
-             * @on snapshot/:namespace/rangeFilter
+             * @event snapshot/:namespace/rangeFilter
              */
             socket.on(['snapshot', this.namespace, 'rangeFilter'].join('/'), function (key, range) {
 
@@ -309,7 +310,7 @@
          * @param emitContentUpdatedEvent {Boolean}
          * @return {void}
          */
-        resumeEmit: function pauseEmit(emitContentUpdatedEvent) {
+        resumeEmit: function resumeEmit(emitContentUpdatedEvent) {
 
             this.allowEmit = true;
 
