@@ -119,6 +119,12 @@
         pageNumber: 1,
 
         /**
+         * @property counts
+         * @type {Array}
+         */
+        counts: [],
+
+        /**
          * @property ranges
          * @type {Array}
          */
@@ -442,6 +448,15 @@
         },
 
         /**
+         * @method setCounts
+         * @param keys {Array}
+         * @return {void}
+         */
+        setCounts: function setCounts(keys) {
+
+        },
+
+        /**
          * @method setRanges
          * @param keys {Array}
          * Responsible for defining for which keys the ranges (min -> max) must be supplied.
@@ -668,8 +683,17 @@
                     direction   : this.sorting.direction
                 },
                 ranges          : this._getRanges(),
+                counts          : this._getCounts(),
                 responseTime    : (new Date().getTime() - start)
             });
+
+        },
+
+        /**
+         * @method getCounts
+         * @private
+         */
+        _getCounts: function _getCounts() {
 
         },
 
