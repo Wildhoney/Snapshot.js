@@ -119,12 +119,6 @@
         pageNumber: 1,
 
         /**
-         * @property counts
-         * @type {Array}
-         */
-        counts: [],
-
-        /**
          * @property ranges
          * @type {Array}
          */
@@ -448,15 +442,6 @@
         },
 
         /**
-         * @method setCounts
-         * @param keys {Array}
-         * @return {void}
-         */
-        setCounts: function setCounts(keys) {
-
-        },
-
-        /**
          * @method setRanges
          * @param keys {Array}
          * Responsible for defining for which keys the ranges (min -> max) must be supplied.
@@ -610,6 +595,7 @@
             var start       = time || new Date().getTime(),
                 content     = this.dimensions[this.sorting.key || this.primaryKey][sortingMethod](Infinity),
                 modelCount  = content.length,
+                collection  = content,
                 pageCount   = this.lastPageNumber = Math.ceil((modelCount / this.perPage)) || 1;
 
             // Only slice up the content if we're not displaying everything on one page.
@@ -683,17 +669,8 @@
                     direction   : this.sorting.direction
                 },
                 ranges          : this._getRanges(),
-                counts          : this._getCounts(),
                 responseTime    : (new Date().getTime() - start)
             });
-
-        },
-
-        /**
-         * @method getCounts
-         * @private
-         */
-        _getCounts: function _getCounts() {
 
         },
 
