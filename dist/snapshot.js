@@ -700,7 +700,7 @@
          * @return {Object}
          * @private
          */
-        _getGroups: function _getGroup() {
+        _getGroups: function _getGroups() {
 
             var groups = {};
 
@@ -716,7 +716,7 @@
 
             }, this));
 
-            return {};
+            return groups;
 
         },
 
