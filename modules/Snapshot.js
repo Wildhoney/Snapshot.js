@@ -595,7 +595,6 @@
             var start       = time || new Date().getTime(),
                 content     = this.dimensions[this.sorting.key || this.primaryKey][sortingMethod](Infinity),
                 modelCount  = content.length,
-                collection  = content,
                 pageCount   = this.lastPageNumber = Math.ceil((modelCount / this.perPage)) || 1;
 
             // Only slice up the content if we're not displaying everything on one page.
