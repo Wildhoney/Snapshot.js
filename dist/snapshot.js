@@ -119,6 +119,12 @@
         pageNumber: 1,
 
         /**
+         * @property groups
+         * @type {Array}
+         */
+        groups: [],
+
+        /**
          * @property ranges
          * @type {Array}
          */
@@ -442,6 +448,21 @@
         },
 
         /**
+         * @method setGroups
+         * @param keys {Array}
+         * @return {void}
+         */
+        setGroups: function setGroups(keys) {
+
+            if (!_.isArray(keys)) {
+                keys = [keys];
+            }
+
+            this.groups = keys;
+
+        },
+
+        /**
          * @method setRanges
          * @param keys {Array}
          * Responsible for defining for which keys the ranges (min -> max) must be supplied.
@@ -668,8 +689,34 @@
                     direction   : this.sorting.direction
                 },
                 ranges          : this._getRanges(),
+                groups          : this._getGroups(),
                 responseTime    : (new Date().getTime() - start)
             });
+
+        },
+
+        /**
+         * @method _getGroups
+         * @return {Object}
+         * @private
+         */
+        _getGroups: function _getGroup() {
+
+            var groups = {};
+
+            // Iterate over each desired key.
+            _.forEach(this.groups, _.bind(function forEach(key) {
+
+                // Voila!
+                var group = this.dimensions[key].group(function group(d) {
+                    return d;
+                });
+
+                groups[key] = group.all();
+
+            }, this));
+
+            return {};
 
         },
 
