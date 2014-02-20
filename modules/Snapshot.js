@@ -716,7 +716,7 @@
 
             }, this));
 
-            return {};
+            return groups;
 
         },
 
