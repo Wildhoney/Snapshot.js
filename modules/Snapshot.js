@@ -59,6 +59,12 @@
         dimensions: {},
 
         /**
+         * @property partition
+         * @type {Number}
+         */
+        partition: Infinity,
+
+        /**
          * @property socket
          * @type {Object}
          */
@@ -460,6 +466,15 @@
 
             this.groups = keys;
 
+        },
+
+        /**
+         * @method setPartition
+         * @param limit {Number}
+         * @return {void}
+         */
+        setPartition: function setPartition(limit) {
+            this.partition = limit;
         },
 
         /**

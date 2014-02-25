@@ -13,6 +13,7 @@ io.sockets.on('connection', function (socket) {
     // Configure the defaults.
     $snapshot.setPerPage(10);
     $snapshot.setPageNumber(1);
+    $snapshot.setPartition(20);
     $snapshot.setSortBy('word', 'ascending');
     $snapshot.setRanges(['id']);
 
