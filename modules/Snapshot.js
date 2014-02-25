@@ -713,13 +713,9 @@
                 responseTime    : (new Date().getTime() - start)
             };
 
-            if (!this.partition) {
-
-                // Emit the entire collection with the statistics.
-                this.socket.emit(['snapshot', this.namespace, 'contentUpdated'].join('/'), content, statistics);
-                return;
-
-            }
+            // Emit the entire collection with the statistics.
+            this.socket.emit(['snapshot', this.namespace, 'contentUpdated'].join('/'), content, statistics);
+            return;
 
             // Otherwise we're using partitioning, and need to send fragmented collections
             // to the end user.
