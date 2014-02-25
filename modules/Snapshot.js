@@ -298,10 +298,11 @@
         },
 
         /**
-         * @method useDelta
-         * @param status {Boolean}
          * Responsible for enabling or disabling delta updates where models that have already been
          * sent across the wire are not transmitted again -- instead, only their primary ID is transmitted.
+         *
+         * @method useDelta
+         * @param status {Boolean}
          * @return {Snapshot}
          */
         useDelta: function useDelta(status) {
@@ -393,7 +394,7 @@
 
         /**
          * @method setPerPage
-         * @emit snapshot/:namespace/contentUpdated
+         * @broadcast snapshot/:namespace/contentUpdated
          * @param perPage {Number}
          * @return {void}
          */
@@ -403,7 +404,7 @@
 
         /**
          * @method setPageNumber
-         * @emit snapshot/:namespace/contentUpdated
+         * @broadcast snapshot/:namespace/contentUpdated
          * @param pageNumber {Number}
          * @return {Boolean}
          */
@@ -429,7 +430,7 @@
 
         /**
          * @method setSortBy
-         * @emit snapshot/:namespace/contentUpdated
+         * @broadcast snapshot/:namespace/contentUpdated
          * @param key {String}
          * @param direction {String|Boolean}
          * @return {void}
@@ -494,12 +495,13 @@
         },
 
         /**
+         * Responsible for applying a filter on any given dimension by its key name.
+         *
          * @method applyFilter
          * @param key {String}
          * @param filterMethod {Function}
          * @param [filterType="afresh"] {String}
-         * @emit snapshot/:namespace/contentUpdated
-         * Responsible for applying a filter on any given dimension by its key name.
+         * @broadcast snapshot/:namespace/contentUpdated
          * @return {void}
          */
         applyFilter: function applyFilter(key, filterMethod, filterType) {
@@ -550,10 +552,11 @@
         },
 
         /**
+         * Responsible for clearing a filter based on its key.
+         *
          * @method clearFilter
          * @param key {String}
-         * @emit snapshot/:namespace/contentUpdated
-         * Responsible for clearing a filter based on its key.
+         * @broadcast snapshot/:namespace/contentUpdated
          * @return {void}
          */
         clearFilter: function clearFilter(key) {
@@ -571,9 +574,10 @@
         },
 
         /**
-         * @method clearFilters
-         * @emit snapshot/:namespace/contentUpdated
          * Responsible for clearing the filters of every single dimension.
+         * 
+         * @method clearFilters
+         * @broadcast snapshot/:namespace/contentUpdated
          * @return {void}
          */
         clearFilters: function clearFilters() {
@@ -607,11 +611,12 @@
         },
 
         /**
-         * @method _emitContentUpdated
-         * @param time {Number}
-         * @emit snapshot/:namespace/contentUpdated
          * Responsible for generating the content and firing the event to notify
          * the client of the current collection of models.
+         *
+         * @method _emitContentUpdated
+         * @param time {Number}
+         * @broadcast snapshot/:namespace/contentUpdated
          * @return {void}
          * @private
          */
@@ -748,8 +753,9 @@
         },
 
         /**
-         * @method _getRanges
          * Retrieve the ranges for any items that need their min/max.
+         * 
+         * @method _getRanges
          * @return {Array}
          * @private
          */
