@@ -589,6 +589,7 @@
          * @method _printMessage
          * @param type {String}
          * @param message {String}
+         * @return {void}
          * @private
          */
         _printMessage: function(type, message) {
@@ -707,9 +708,17 @@
                 responseTime    : (new Date().getTime() - start)
             };
 
-            // Emits the event, passing the collection of models, and the time the
-            // operation took to complete.
-            this.socket.emit(['snapshot', this.namespace, 'contentUpdated'].join('/'), content, statistics);
+            if (!this.partition) {
+
+                // Emit the entire collection with the statistics.
+                this.socket.emit(['snapshot', this.namespace, 'contentUpdated'].join('/'), content, statistics);
+                return;
+
+            }
+
+            // Otherwise we're using partitioning, and need to send fragmented collections
+            // to the end user.
+            // @TODO
 
         },
 
