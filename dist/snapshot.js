@@ -59,6 +59,12 @@
         dimensions: {},
 
         /**
+         * @property partition
+         * @type {Number}
+         */
+        partition: 0,
+
+        /**
          * @property socket
          * @type {Object}
          */
@@ -292,10 +298,11 @@
         },
 
         /**
-         * @method useDelta
-         * @param status {Boolean}
          * Responsible for enabling or disabling delta updates where models that have already been
          * sent across the wire are not transmitted again -- instead, only their primary ID is transmitted.
+         *
+         * @method useDelta
+         * @param status {Boolean}
          * @return {Snapshot}
          */
         useDelta: function useDelta(status) {
@@ -387,7 +394,7 @@
 
         /**
          * @method setPerPage
-         * @emit snapshot/:namespace/contentUpdated
+         * @broadcast snapshot/:namespace/contentUpdated
          * @param perPage {Number}
          * @return {void}
          */
@@ -397,7 +404,7 @@
 
         /**
          * @method setPageNumber
-         * @emit snapshot/:namespace/contentUpdated
+         * @broadcast snapshot/:namespace/contentUpdated
          * @param pageNumber {Number}
          * @return {Boolean}
          */
@@ -423,7 +430,7 @@
 
         /**
          * @method setSortBy
-         * @emit snapshot/:namespace/contentUpdated
+         * @broadcast snapshot/:namespace/contentUpdated
          * @param key {String}
          * @param direction {String|Boolean}
          * @return {void}
@@ -463,6 +470,15 @@
         },
 
         /**
+         * @method setPartition
+         * @param limit {Number}
+         * @return {void}
+         */
+        setPartition: function setPartition(limit) {
+            this.partition = limit;
+        },
+
+        /**
          * @method setRanges
          * @param keys {Array}
          * Responsible for defining for which keys the ranges (min -> max) must be supplied.
@@ -479,12 +495,13 @@
         },
 
         /**
+         * Responsible for applying a filter on any given dimension by its key name.
+         *
          * @method applyFilter
          * @param key {String}
          * @param filterMethod {Function}
          * @param [filterType="afresh"] {String}
-         * @emit snapshot/:namespace/contentUpdated
-         * Responsible for applying a filter on any given dimension by its key name.
+         * @broadcast snapshot/:namespace/contentUpdated
          * @return {void}
          */
         applyFilter: function applyFilter(key, filterMethod, filterType) {
@@ -535,10 +552,11 @@
         },
 
         /**
+         * Responsible for clearing a filter based on its key.
+         *
          * @method clearFilter
          * @param key {String}
-         * @emit snapshot/:namespace/contentUpdated
-         * Responsible for clearing a filter based on its key.
+         * @broadcast snapshot/:namespace/contentUpdated
          * @return {void}
          */
         clearFilter: function clearFilter(key) {
@@ -556,9 +574,10 @@
         },
 
         /**
-         * @method clearFilters
-         * @emit snapshot/:namespace/contentUpdated
          * Responsible for clearing the filters of every single dimension.
+         * 
+         * @method clearFilters
+         * @broadcast snapshot/:namespace/contentUpdated
          * @return {void}
          */
         clearFilters: function clearFilters() {
@@ -574,6 +593,7 @@
          * @method _printMessage
          * @param type {String}
          * @param message {String}
+         * @return {void}
          * @private
          */
         _printMessage: function(type, message) {
@@ -591,11 +611,12 @@
         },
 
         /**
-         * @method _emitContentUpdated
-         * @param time {Number}
-         * @emit snapshot/:namespace/contentUpdated
          * Responsible for generating the content and firing the event to notify
          * the client of the current collection of models.
+         *
+         * @method _emitContentUpdated
+         * @param time {Number}
+         * @broadcast snapshot/:namespace/contentUpdated
          * @return {void}
          * @private
          */
@@ -672,9 +693,8 @@
                 return;
             }
 
-            // Emits the event, passing the collection of models, and the time the
-            // operation took to complete.
-            this.socket.emit(['snapshot', this.namespace, 'contentUpdated'].join('/'), content, {
+            // Compose the object for the statistics.
+            var statistics = {
                 pages: {
                     total       : pageCount,
                     current     : this.pageNumber,
@@ -691,7 +711,15 @@
                 ranges          : this._getRanges(),
                 groups          : this._getGroups(),
                 responseTime    : (new Date().getTime() - start)
-            });
+            };
+
+            // Emit the entire collection with the statistics.
+            this.socket.emit(['snapshot', this.namespace, 'contentUpdated'].join('/'), content, statistics);
+            return;
+
+            // Otherwise we're using partitioning, and need to send fragmented collections
+            // to the end user.
+            // @TODO
 
         },
 
@@ -721,8 +749,9 @@
         },
 
         /**
-         * @method _getRanges
          * Retrieve the ranges for any items that need their min/max.
+         * 
+         * @method _getRanges
          * @return {Array}
          * @private
          */
