@@ -62,7 +62,7 @@
          * @property partition
          * @type {Number}
          */
-        partition: Infinity,
+        partition: 0,
 
         /**
          * @property socket
@@ -687,9 +687,8 @@
                 return;
             }
 
-            // Emits the event, passing the collection of models, and the time the
-            // operation took to complete.
-            this.socket.emit(['snapshot', this.namespace, 'contentUpdated'].join('/'), content, {
+            // Compose the object for the statistics.
+            var statistics = {
                 pages: {
                     total       : pageCount,
                     current     : this.pageNumber,
@@ -706,7 +705,11 @@
                 ranges          : this._getRanges(),
                 groups          : this._getGroups(),
                 responseTime    : (new Date().getTime() - start)
-            });
+            };
+
+            // Emits the event, passing the collection of models, and the time the
+            // operation took to complete.
+            this.socket.emit(['snapshot', this.namespace, 'contentUpdated'].join('/'), content, statistics);
 
         },
 
