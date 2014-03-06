@@ -27,7 +27,7 @@
         $scope.filter = '';
 
         // Establish a connection to the Node.js server.
-        var socket = io.connect('http://localhost:8888');
+        var socket = io.connect('http://localhost:8890');
 
         /**
          * @on snapshot/default/contentUpdated
