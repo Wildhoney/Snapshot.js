@@ -200,6 +200,14 @@
             }.bind(this));
 
             /**
+             * @event snapshot/:namespace/clearFilter
+             */
+            socket.on(['snapshot', this.namespace, 'clearFilter'].join('/'), function (key) {
+                this.clearFilter(key);
+                this._emitContentUpdated();
+            }.bind(this));
+
+            /**
              * @event snapshot/:namespace/inArrayFilter
              */
             socket.on(['snapshot', this.namespace, 'inArrayFilter'].join('/'), function (key, array) {
