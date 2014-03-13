@@ -151,6 +151,7 @@ In light of Crossfilter's learning curve, Snapshot ships with a handful of bundl
  * `snapshot/:namespace/regExpFilter` `{String}` `{String}`
  * `snapshot/:namespace/inArrayFilter` `{String}` `{Array}`
  * `snapshot/:namespace/notInArrayFilter` `{String}` `{Array}`
+ * `snapshot/:namespace/clearFilter` `{String}`
 
 ```javascript
 socket.emit('snapshot/default/fuzzyFilter', 'word', 'abc');
