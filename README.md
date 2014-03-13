@@ -155,8 +155,12 @@ In light of Crossfilter's learning curve, Snapshot ships with a handful of bundl
 
 ```javascript
 socket.emit('snapshot/default/fuzzyFilter', 'word', 'abc');
+socket.emit('snapshot/default/exactFilter', 'word', 'kittens');
+socket.emit('snapshot/default/rangeFilter', 'word', [12, Infinity]);
 socket.emit('snapshot/default/regExpFilter', 'word', '[a-z0-9]+', 'ig');
 socket.emit('snapshot/default/inArrayFilter', 'word', ['firstWord', 'secondWord']);
+socket.emit('snapshot/default/notInArrayFilter', 'word', ['thirdWord']);
+socket.emit('snapshot/default/clearFilter', 'word');
 ```
 
 Each bundled filter expects the event name (`snapshot/default/fuzzyFilter`), the key (`word`), and value (`abc`).
