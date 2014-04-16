@@ -2,6 +2,19 @@ var io          = require('socket.io').listen(8890),
     fs          = require('fs'),
     Snapshot    = require('./../../modules/Snapshot.js');
 
+(function($process) {
+
+    "use strict";
+
+    var express      = require('express'),
+        app          = express();
+
+    // Begin Express so the statistics are available from the `localPort`.
+    app.use(express.static(__dirname + '/../client'));
+    app.listen($process.env.PORT || 3001);
+
+})(process);
+
 /**
  * @on connection
  */
