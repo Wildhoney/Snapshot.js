@@ -1,4 +1,5 @@
 /node_modules
-/bower_components
+/example/client/js/vendor
+!/example/client/js/vendor/.gitkeep
 /.idea
 generate-words.rb
