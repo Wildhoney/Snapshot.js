@@ -4,7 +4,9 @@
   "version": "0.3.10",
   "description": "Node.js app for slicing and dicing ~100,000 models in <5ms with easy sorting, paginating, and filtering.",
   "scripts": {
-    "test": "grunt test"
+    "test": "grunt test",
+    "start": "node example/server/default.js",
+    "postinstall": "node_modules/bower/bin/bower install && node_modules/grunt-cli/bin/grunt build"
   },
   "main": "dist/snapshot.js",
   "repository": {

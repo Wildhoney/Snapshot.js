@@ -21,14 +21,14 @@ module.exports = function(grunt) {
         copy: {
             main: {
                 files: [
-                    {flatten: true, src: ['modules/Snapshot.js'], dest: 'dist/snapshot.js'}
+                    { flatten: true, src: ['modules/Snapshot.js'], dest: 'dist/snapshot.js' }
                 ]
             }
         },
         rename: {
             main: {
                 files: [
-                    {src: ['dist/Snapshot.js'], dest: 'dist/<%= pkg.buildName %>.js'}
+                    { src: ['dist/Snapshot.js'], dest: 'dist/<%= pkg.buildName %>.js' }
                 ]
             }
         },
