@@ -77,6 +77,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-ng-constant');
 
+    grunt.registerTask('build', ['ngconstant:development', 'copy', 'uglify']);
     grunt.registerTask('build:development', ['ngconstant:development', 'copy', 'uglify']);
     grunt.registerTask('build:production', ['ngconstant:production', 'copy', 'uglify']);
     grunt.registerTask('test', ['mochaTest', 'jshint']);
