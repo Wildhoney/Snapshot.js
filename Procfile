@@ -1,1 +1,2 @@
-web: node example/server/default.js
+web: node example/client/server.js
+socket: node example/server/default.js
