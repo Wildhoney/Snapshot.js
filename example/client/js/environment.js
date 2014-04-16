@@ -4,7 +4,7 @@
 
 .constant("ENV", {
   "name": "development",
-  "socketEndpoint": " http://localhost:8890/"
+  "socketEndpoint": "http://localhost:8890/"
 })
 
 ;

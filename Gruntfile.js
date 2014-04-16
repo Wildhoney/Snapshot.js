@@ -64,8 +64,10 @@ module.exports = function(grunt) {
                     dest: 'example/client/js/environment.js'
                 },
                 constants: {
-                    ENV: 'production',
-                    socketEndpoint: 'http://node-snapshot.herokuapp.com:8890/'
+                    ENV: {
+                        name: 'production',
+                        socketEndpoint: 'http://node-snapshot.herokuapp.com:8890/'
+                    }
                 }
             }
         }
