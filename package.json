@@ -1,7 +1,7 @@
 {
   "name": "node-snapshot",
   "buildName": "snapshot",
-  "version": "0.3.14",
+  "version": "0.3.15",
   "description": "Node.js app for slicing and dicing ~100,000 models in <5ms with easy sorting, paginating, and filtering.",
   "scripts": {
     "test": "grunt test",
