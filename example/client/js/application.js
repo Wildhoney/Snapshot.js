@@ -5,6 +5,6 @@
     /**
      * @module app
      */
-    $window.app = angular.module('app', []);
+    $window.app = angular.module('app', ['config']);
 
 })(window);

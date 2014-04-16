@@ -39,6 +39,35 @@ module.exports = function(grunt) {
                 },
                 src: ['tests/*.js']
             }
+        },
+        ngconstant: {
+            // Options for all targets
+            options: {
+                space: '  ',
+                wrap: '"use strict";\n\n {%= __ngModule %}',
+                name: 'config'
+            },
+            // Environment targets
+            development: {
+                options: {
+                    dest: 'example/client/js/environment.js'
+                },
+                constants: {
+                    ENV: {
+                        name: 'development',
+                        socketEndpoint: ' http://localhost:8890/'
+                    }
+                }
+            },
+            production: {
+                options: {
+                    dest: 'example/client/js/environment.js'
+                },
+                constants: {
+                    ENV: 'production',
+                    socketEndpoint: ' http://node-snapshot.herokuapp.com:8890/'
+                }
+            }
         }
     });
 
@@ -46,8 +75,10 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-mocha-test');
     grunt.loadNpmTasks('grunt-contrib-copy');
+    grunt.loadNpmTasks('grunt-ng-constant');
 
-    grunt.registerTask('build', ['copy', 'uglify']);
+    grunt.registerTask('build:development', ['ngconstant:development', 'copy', 'uglify']);
+    grunt.registerTask('build:production', ['ngconstant:production', 'copy', 'uglify']);
     grunt.registerTask('test', ['mochaTest', 'jshint']);
     grunt.registerTask('default', ['mochaTest', 'jshint', 'copy', 'uglify']);
 

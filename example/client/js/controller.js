@@ -6,7 +6,7 @@
      * @module App
      * @controller IndexController
      */
-    $app.controller('IndexController', function IndexController($scope) {
+    $app.controller('IndexController', function IndexController($scope, ENV) {
 
         /**
          * @property collection
@@ -27,7 +27,7 @@
         $scope.filter = '';
 
         // Establish a connection to the Node.js server.
-        var socket = io.connect('http://node-snapshot.herokuapp.com:8890');
+        var socket = io.connect(ENV.socketEndpoint);
 
         /**
          * @on snapshot/default/contentUpdated
