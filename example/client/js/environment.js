@@ -1,3 +1,5 @@
+(function() {
+
 "use strict";
 
  angular.module("config", [])
@@ -7,4 +9,4 @@
   "socketEndpoint": "http://localhost:3001"
 })
 
-;
+; }());
