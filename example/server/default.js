@@ -2,7 +2,7 @@
 
     "use strict";
 
-    var io          = require('socket.io').listen($process.env.$PORT || 3002),
+    var io          = require('socket.io').listen($process.env.PORT || 3002),
         fs          = require('fs'),
         Snapshot    = require('./../../modules/Snapshot.js'),
         express     = require('express'),
@@ -10,7 +10,7 @@
 
     // Begin Express so the statistics are available from the `localPort`.
     app.use(express.static(__dirname + '/../client'));
-    app.listen($process.env.$PORT || 3001);
+    app.listen($process.env.PORT || 3001);
 
     /**
      * @on connection
