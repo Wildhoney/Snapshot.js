@@ -55,7 +55,7 @@ module.exports = function(grunt) {
                 constants: {
                     ENV: {
                         name: 'development',
-                        socketEndpoint: 'http://localhost:8890/'
+                        socketEndpoint: 'http://localhost:3002/'
                     }
                 }
             },
@@ -66,7 +66,7 @@ module.exports = function(grunt) {
                 constants: {
                     ENV: {
                         name: 'production',
-                        socketEndpoint: 'http://node-snapshot.herokuapp.com:8890/'
+                        socketEndpoint: 'http://node-snapshot.herokuapp.com:/' + (process.env.$PORT || 3002)
                     }
                 }
             }
