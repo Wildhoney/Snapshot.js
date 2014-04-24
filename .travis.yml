@@ -1,18 +1,20 @@
 language: node_js
 node_js:
-- '0.10'
+  - "0.10"
 before_script:
-- npm install -g grunt-cli
-- npm install -g bower
+  - npm install -g grunt-cli
+  - npm install -g bower
 script:
-- npm install
-- bower install
-- grunt test
+  - npm install
+  - bower install
+  - grunt test
 deploy:
   provider: heroku
-  run: node_modules/bower/bin/bower install && node_modules/grunt-cli/bin/grunt build:production
   api_key:
     secure: C3yZ7lh8J0IdamDUc7pY5nmf8gRlNHNRz60E/pSL+ksDTbGWPw5wD+Mq5wohV/QdLktjyAGVQh3hJP/Y2CvXrznj+cK+lePXK0yTnJK4D9sOepQBVrxStA4ZjIdZ7fIvKy3E3jVxPd9Hp3sJZGLU8OhaYsLFgtnnkrW9d2kaY3M=
   app: node-snapshot
   on:
     repo: Wildhoney/Snapshot.js
+  run:
+    - "node_modules/bower/bin/bower install"
+    - "node_modules/grunt-cli/bin/grunt build:production"
