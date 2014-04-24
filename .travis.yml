@@ -16,5 +16,5 @@ deploy:
   on:
     repo: Wildhoney/Snapshot.js
   run:
-    - "bower install -s"
+    - "bower install"
     - "grunt build:production"
