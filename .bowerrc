@@ -1,3 +1,4 @@
 {
-  "directory" : "example/client/js/vendor"
+  "directory" : "example/client/js/vendor",
+  "interactive": false
 }
