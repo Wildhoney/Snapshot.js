@@ -1,4 +1,4 @@
-(function($module) {
+(function($module, $console) {
 
     "use strict";
 
@@ -10,7 +10,7 @@
     } catch (e) {
 
         // We couldn't load Crossfilter and/or Underscore.
-        console.error('Cannot load dependencies. Please ensure you ran `npm install`.');
+        $console.error('Cannot load dependencies. Please ensure you ran `npm install`.');
 
     }
 
@@ -614,7 +614,7 @@
                 case ('neutral'): title    = '   info  - '.cyan; break;
             }
 
-            console.log(title + 'Snapshot.js - '.bold.grey + message.white);
+            $console.log(title + 'Snapshot.js - '.bold.grey + message.white);
 
         },
 
@@ -834,4 +834,4 @@
 
     $module.exports = Snapshot;
 
-})(module);
+})(module, console);
