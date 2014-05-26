@@ -1,4 +1,4 @@
-(function($module, $console) {
+(function($module, $process, $console) {
 
     "use strict";
 
@@ -375,7 +375,7 @@
                     return;
                 }
 
-                process.nextTick(createDimension);
+                $process.nextTick(createDimension);
 
             }.bind(this));
 
@@ -394,7 +394,7 @@
                     return;
                 }
 
-                process.nextTick(emit);
+                $process.nextTick(emit);
 
             }
 
@@ -593,6 +593,7 @@
             _.forEach(this.dimensions, function(dimension) {
                 dimension.filterAll();
             });
+
             this._emitContentUpdated();
 
         },
@@ -834,4 +835,4 @@
 
     $module.exports = Snapshot;
 
-})(module, console);
+})(module, process, console);
