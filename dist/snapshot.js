@@ -1,4 +1,4 @@
-(function($module) {
+(function($module, $process, $console) {
 
     "use strict";
 
@@ -10,7 +10,7 @@
     } catch (e) {
 
         // We couldn't load Crossfilter and/or Underscore.
-        console.error('Cannot load dependencies. Please ensure you ran `npm install`.');
+        $console.error('Cannot load dependencies. Please ensure you ran `npm install`.');
 
     }
 
@@ -375,7 +375,7 @@
                     return;
                 }
 
-                process.nextTick(createDimension);
+                $process.nextTick(createDimension);
 
             }.bind(this));
 
@@ -394,7 +394,7 @@
                     return;
                 }
 
-                process.nextTick(emit);
+                $process.nextTick(emit);
 
             }
 
@@ -419,11 +419,13 @@
         setPageNumber: function setPageNumber(pageNumber) {
 
             if (!this.crossfilter && pageNumber > 0) {
+
                 // If we haven't set the Crossfilter yet then we'll allow the developer
                 // to set the page number to whatever s/he wishes. Even if they set a ridiculous
                 // number, Crossfilter will simply return the last valid page.
                 this.pageNumber = pageNumber;
                 return false;
+
             }
 
             // Return false if the change to the `pageNumber` would put us out of bounds.
@@ -446,9 +448,10 @@
         setSortBy: function setSortBy(key, direction) {
 
             /**
-             * @method invertDirection
              * Responsible for inverting the current sort direction if it hasn't
              * been explicitly specified.
+             *
+             * @method invertDirection
              * @return {void}
              */
             var invertDirection = function invertDirection() {
@@ -487,9 +490,10 @@
         },
 
         /**
+         * Responsible for defining for which keys the ranges (min -> max) must be supplied.
+         *
          * @method setRanges
          * @param keys {Array}
-         * Responsible for defining for which keys the ranges (min -> max) must be supplied.
          * @return {void}
          */
         setRanges: function setRanges(keys) {
@@ -593,6 +597,7 @@
             _.forEach(this.dimensions, function(dimension) {
                 dimension.filterAll();
             });
+
             this._emitContentUpdated();
 
         },
@@ -614,7 +619,7 @@
                 case ('neutral'): title    = '   info  - '.cyan; break;
             }
 
-            console.log(title + 'Snapshot.js - '.bold.grey + message.white);
+            $console.log(title + 'Snapshot.js - '.bold.grey + message.white);
 
         },
 
@@ -757,11 +762,6 @@
 
             // Emit the entire collection with the statistics.
             this.socket.emit(['snapshot', this.namespace, 'contentUpdated'].join('/'), content, statistics);
-            return;
-
-            // Otherwise we're using partitioning, and need to send fragmented collections
-            // to the end user.
-            // @TODO
 
         },
 
@@ -834,4 +834,4 @@
 
     $module.exports = Snapshot;
 
-})(module);
+})(module, process, console);
