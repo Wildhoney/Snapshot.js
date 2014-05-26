@@ -419,11 +419,13 @@
         setPageNumber: function setPageNumber(pageNumber) {
 
             if (!this.crossfilter && pageNumber > 0) {
+
                 // If we haven't set the Crossfilter yet then we'll allow the developer
                 // to set the page number to whatever s/he wishes. Even if they set a ridiculous
                 // number, Crossfilter will simply return the last valid page.
                 this.pageNumber = pageNumber;
                 return false;
+
             }
 
             // Return false if the change to the `pageNumber` would put us out of bounds.
@@ -446,9 +448,10 @@
         setSortBy: function setSortBy(key, direction) {
 
             /**
-             * @method invertDirection
              * Responsible for inverting the current sort direction if it hasn't
              * been explicitly specified.
+             *
+             * @method invertDirection
              * @return {void}
              */
             var invertDirection = function invertDirection() {
@@ -487,9 +490,10 @@
         },
 
         /**
+         * Responsible for defining for which keys the ranges (min -> max) must be supplied.
+         *
          * @method setRanges
          * @param keys {Array}
-         * Responsible for defining for which keys the ranges (min -> max) must be supplied.
          * @return {void}
          */
         setRanges: function setRanges(keys) {
@@ -758,11 +762,6 @@
 
             // Emit the entire collection with the statistics.
             this.socket.emit(['snapshot', this.namespace, 'contentUpdated'].join('/'), content, statistics);
-            return;
-
-            // Otherwise we're using partitioning, and need to send fragmented collections
-            // to the end user.
-            // @TODO
 
         },
 
