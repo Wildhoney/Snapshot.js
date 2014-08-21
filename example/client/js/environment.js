@@ -5,8 +5,8 @@
  angular.module("config", [])
 
 .constant("ENV", {
-  "name": "development",
-  "socketEndpoint": "http://localhost:3001/"
+  "name": "production",
+  "socketEndpoint": "http://node-snapshot.herokuapp.com/"
 })
 
 ; }());
