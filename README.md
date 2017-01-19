@@ -23,7 +23,7 @@ All dependencies can be installed with `bower install` and `npm install`, howeve
  * <a href="http://underscorejs.org/">Underscore.js</a> (server);
  * <a href="http://nodejs.org/">Node.js</a> (server);
  * <a href="http://square.github.io/crossfilter/">Crossfilter</a> (server);
- * <a href="http://visionmedia.github.io/mocha/">Mocha</a> &ndash; with Should.js (grunt);
+ * <a href="http://mochajs.org/">Mocha</a> &ndash; with Should.js (grunt);
 
 Quick Start
 -----------
