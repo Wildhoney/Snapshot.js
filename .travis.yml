@@ -14,6 +14,7 @@ script:
 deploy:
   provider: heroku
   all_branches: true
+  skip_cleanup: true
   api_key:
     secure: C3yZ7lh8J0IdamDUc7pY5nmf8gRlNHNRz60E/pSL+ksDTbGWPw5wD+Mq5wohV/QdLktjyAGVQh3hJP/Y2CvXrznj+cK+lePXK0yTnJK4D9sOepQBVrxStA4ZjIdZ7fIvKy3E3jVxPd9Hp3sJZGLU8OhaYsLFgtnnkrW9d2kaY3M=
   app: node-snapshot
